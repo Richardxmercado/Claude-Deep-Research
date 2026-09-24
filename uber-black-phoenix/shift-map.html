@@ -125,7 +125,7 @@ h2{font:900 20px/1 var(--display);text-transform:uppercase;letter-spacing:.04em;
     <h2>10-second rule</h2>
     <div class="rule-big">Payout $ ≥ total minutes</div>
     <ul class="facts">
-      <li class="i"><span class="t">≈</span><span>Pickup minutes + trip minutes. 8 + 30 = 38, so it needs $38+. That's at least $1 a minute, or $60/hr, from accepting to drop-off. It doesn't count the drive back, so take ride endings into account. This is arithmetic, not market data.</span></li>
+      <li class="i"><span class="t">≈</span><span>Pickup minutes + trip minutes. 8 + 30 = 38, so it needs $38+. That's at least $1 a minute, or $60/hr, from accepting to drop-off. If the ride ends far out, add the minutes to drive back too. This is arithmetic, not market data.</span></li>
       <li class="v"><span class="t">✓</span><span>Apps like GigU, Para and Maxymo grade offers automatically, but Uber says automation tools that access its app aren't allowed, and Lyft has warned drivers using them of deactivation.<sup><a href="#s15">15</a></sup> Not worth risking a Black account. The rule above does the same job in your head.</span></li>
     </ul>
   </section>
@@ -135,7 +135,7 @@ h2{font:900 20px/1 var(--display);text-transform:uppercase;letter-spacing:.04em;
     <ul class="facts">
       <li class="v"><span class="t">✓</span><span>Suburban with the 5.3L V8 (the usual engine; check yours): EPA 14–15 mpg city.<sup><a href="#s6">6</a></sup> At $4.95 that's <b>33–35¢ every mile</b>. 10 empty miles ≈ $3.40.</span></li>
       <li class="v"><span class="t">✓</span><span>Phoenix-area average regular was <b>$4.70</b> on Sept 18.<sup><a href="#s7">7</a></sup> You're paying $4.89–5.00, which is 19–30¢ over, or about $4.75–7.50 per 25 gallons.</span></li>
-      <li class="v"><span class="t">✓</span><span>Costco gas at <b>15255 N Hayden Rd</b> is about 1.5 miles from the Kierland garage (membership required).<sup><a href="#s8">8</a></sup> Check GasBuddy before you go.</span></li>
+      <li class="v"><span class="t">✓</span><span>Costco gas at <b>15255 N Hayden Rd</b> is about 1.5 miles from the Kierland garage by my estimate (membership required).<sup><a href="#s8">8</a></sup> Check GasBuddy for its price. Fill up there only when a trip already takes you north.</span></li>
       <li class="v"><span class="t">✓</span><span>In Tempe heat, a car parked 1 hour in shade had about 100°F inside, vs 116°F in sun. Seats were 105°F vs 123°F.<sup><a href="#s9">9</a></sup></span></li>
       <li class="i"><span class="t">≈</span><span>Idling: a 4.6L engine burns 0.39 gal/hr with no load, and AC adds up to 90%.<sup><a href="#s10">10</a></sup> Scaled to a 5.3L with AC, that's roughly 0.45–0.85 gal/hr, or $2.20–4.20/hr at $4.95. An hour of idling costs about the same as 6–12 empty miles.</span></li>
     </ul>
@@ -153,7 +153,7 @@ h2{font:900 20px/1 var(--display);text-transform:uppercase;letter-spacing:.04em;
       <li id="s7" value="7"><a href="https://www.gasolytics.com/gas-prices/arizona/phoenix" target="_blank" rel="noopener">Phoenix gas prices</a> · <a href="https://www.azfamily.com/2026/09/15/how-does-each-phoenix-gas-station-set-its-prices-why-nearby-pumps-differ/" target="_blank" rel="noopener">azfamily, Sept 15 2026</a></li>
       <li id="s8" value="8"><a href="https://www.yelp.com/biz/costco-gasoline-scottsdale" target="_blank" rel="noopener">Costco Gasoline, 15255 N Hayden Rd</a></li>
       <li id="s9" value="9"><a href="https://news.asu.edu/20180516-discoveries-asu-study-hot-cars-can-hit-deadly-temperatures-within-one-hour" target="_blank" rel="noopener">ASU hot-car study, Tempe</a></li>
-      <li id="s10" value="10"><a href="https://afdc.energy.gov/files/u/publication/argonne_idling_handout.pdf" target="_blank" rel="noopener">Argonne National Lab: idling fuel use</a></li>
+      <li id="s10" value="10"><a href="https://afdc.energy.gov/files/u/publication/argonne_idling_handout.pdf" target="_blank" rel="noopener">Argonne National Lab: idling fuel use</a> · <a href="https://autosist.com/blog/how-much-fuel-does-idling-use-fleet-vehicles/" target="_blank" rel="noopener">AC adds up to 90% at idle</a></li>
       <li id="s11" value="11"><a href="https://therideshareguy.com/how-does-ubers-destination-filter-work/" target="_blank" rel="noopener">Destination filter: 2 per day; several trips toward one destination count once</a></li>
       <li id="s12" value="12"><a href="https://therideshareguy.com/uber-reserve/" target="_blank" rel="noopener">Uber Reserve for drivers: Opportunities in the app menu, up to 7 days ahead, fare locked</a></li>
       <li id="s13" value="13"><a href="https://gridwise.io/blog/uber-and-lyft-driver-instructions-for-phoenix-sky-harbor-international-airport-phx" target="_blank" rel="noopener">PHX: rideshare drivers may wait only in staging lots</a></li>
@@ -204,27 +204,27 @@ const OLDTOWN_SET = ["w","valleyho","canopy","andaz","phoenician","shadows","cam
 
 /* ----- plan: Thursday Sept 24, 5am–5pm (Phoenix time, decimal hours) ----- */
 const BLOCKS = [
-  {s:4.75, e:10, label:"4:45", tab:"Old Town", name:"Morning flights", park:"oldtown", bounce:"oldtown", hot:OLDTOWN_SET,
+  {s:4.75, e:10, label:"4:45", tab:"AM flights", name:"Morning flights", park:"oldtown", bounce:"oldtown", hot:OLDTOWN_SET,
    facts:[
+     ["v","Tonight, check Menu → Opportunities in the Driver app for reserved trips. They're posted up to 7 days ahead and the fare is locked when you accept.","s12"],
      ["v","PHX's busiest times are 7–9am and 3–6pm.","s3"],
-     ["i","Hotels here are roughly 20 min from PHX. If 7–9am is flight time, those riders leave the hotel about 4:15–7:15am. If it's when they reach the airport, about 6:30–8:40am. This block covers both.",""],
-     ["v","9 upscale hotels and resorts are within about 4 miles (straight line): W, Valley Ho, Canopy, Andaz, the Phoenician, Mountain Shadows, Camelback Inn, Montelucia, Sanctuary. (Addresses checked; distances measured on the map.)",""],
-     ["v","Old Town street parking is free, with a 3-hour limit only from 8am to 10pm, so before 8am you can sit at the curb for a faster exit.","s4"],
-     ["i","Uber matches on pickup time, so a spot in the middle of the 9 keeps your ETA short to all of them. Hotel-to-PHX is roughly 8–10 miles by my map estimate.",""]]},
-  {s:10, e:12.25, label:"10:00", tab:"Kierland", name:"11am checkout wave", park:"kierland", bounce:"oldtown", hot:["kierland","princess"],
+     ["i","If riders arrive 1.5–2.5 hrs before a 7–9am flight and the hotel is about 20 min from PHX, they leave about 4:10–7:10am. If 7–9am is when they reach the airport, about 6:40–8:40am. Your 5am start covers nearly all of both.",""],
+     ["v","9 upscale hotels and resorts are near this spot (addresses checked): W, Valley Ho, Canopy, Andaz, the Phoenician, Mountain Shadows, Camelback Inn, Montelucia, Sanctuary.",""],
+     ["i","All 9 are within about 4 miles, and PHX is about 8 miles, by my map measurements.",""],
+     ["v","Old Town street parking is free, with a 3-hour limit only 8am–10pm, so before 8am you can wait at the curb for a faster exit.","s4"],
+     ["i","Uber matches on pickup time, so a spot in the middle of the 9 keeps your pickup time short to all of them.",""]]},
+  {s:10, e:12.25, label:"10:00", tab:"Checkouts", name:"11am checkout wave", park:"oldtown", bounce:"oldtown", hot:[...OLDTOWN_SET,"kierland","princess"], north:true,
    facts:[
-     ["v","Westin Kierland and the Fairmont Princess both check out at 11am.","s2"],
-     ["v","Costco gas (15255 N Hayden Rd) is about 1.5 miles away (membership required). Check its price in GasBuddy against the $4.89–5.00 you've been paying.","s8"],
-     ["i","Kierland to PHX is roughly 18 miles, more than double an Old Town airport run (my map estimates), so a bigger fare. But you drive back empty, and one LA Uber driver's own 3,448 trips paid $118/hr on 0–2 mi trips vs $80/hr on 20+ mi. Check your own numbers in Your trips.","s16"],
-     ["v","The Phoenician and Sanctuary also check out at 11am. If you're south of Shea when this block starts, use the Old Town spot instead of driving up.","s2"],
-     ["i","This is shopping-center customer parking. If security asks you to move, move.",""]]},
-  {s:12.25, e:16.25, label:"12:15", tab:"Old Town", name:"Afternoon flights", park:"oldtown", bounce:"oldtown", hot:OLDTOWN_SET,
+     ["v","The Phoenician and Sanctuary check out at 11am, and so do Westin Kierland and the Fairmont Princess up north.","s2"],
+     ["i","Stay in Old Town. Driving up to Kierland and back is about 24 miles (≈$8 gas, by my map estimate), and one LA driver's own data paid more per hour on short trips ($118/hr at 0–2 mi) than long ones ($80/hr at 20+ mi).","s16"],
+     ["i","Exception: if a trip leaves you in north Scottsdale during this block, park at the Kierland Commons garage instead of driving back empty. It's free shopping-center parking; if security asks you to move, move.","s5"],
+     ["i","Need gas while you're up there? Costco at 15255 N Hayden Rd is about 1.5 miles from that garage (membership required). A special trip from Old Town (about 24 miles round trip, ≈$8) only pays off if Costco is at least 32¢ a gallon cheaper than your usual station on a 25-gallon fill.","s8"]]},
+  {s:12.25, e:16.25, label:"12:15", tab:"PM flights", name:"Afternoon flights", park:"oldtown", bounce:"oldtown", hot:OLDTOWN_SET,
    facts:[
      ["v","PHX's second busy period is 3–6pm.","s3"],
-     ["i","By the same math as the morning, hotel pickups run about 12:15–5:30pm, so your whole afternoon is in the window.",""],
+     ["i","Same math as the morning: hotel pickups run about 12:10–5:40pm, so the whole afternoon until you head home is in the window.",""],
      ["v","Shade kept a parked car about 16°F cooler inside after an hour in Tempe heat.","s9"],
-     ["i","The underground garage is the coolest spot, but it can block GPS. Park near the entrance ramp and check that the Uber app still shows your location. If it doesn't, use the surface lot.",""],
-     ["i","Same reasoning as the morning: short pickup time to all 9 hotels.",""]]},
+     ["i","The underground garage is the shadiest spot, but it can block GPS. Park near the entrance ramp and check that the Uber app still shows your location. If it doesn't, use the surface lot.","s17"]]},
   {s:16.25, e:17, label:"4:15", tab:"Home", name:"Ride home", park:null, bounce:null, hot:[],
    facts:[
      ["v","You get 2 destination filters a day. Several trips toward the same destination count as one.","s11"],
@@ -335,7 +335,7 @@ function render(){
   if(b.bounce){
     const p = PARK[b.bounce], mi = miles(PHX, p);
     $("phx").hidden = false;
-    $("phx").innerHTML = `<span class="x">PHX</span><span>Dropped at the airport? Don't wait there. Stay online and drive to <b>${p.name}</b>: about ${mi.toFixed(0)} mi, $${(mi*GAS_PER_MILE).toFixed(2)} gas. <a href="${navUrl(p.addr)}" target="_blank" rel="noopener">Navigate</a></span>`;
+    $("phx").innerHTML = `<span class="x">PHX</span><span>Dropped at the airport? Rideshare drivers may only wait in the PHX staging lot<sup><a href="#s13">13</a></sup>, so leave. Stay online and drive to <b>${p.name}</b>: about ${mi.toFixed(0)} mi, $${(mi*GAS_PER_MILE).toFixed(2)} gas. <a href="${navUrl(p.addr)}" target="_blank" rel="noopener">Navigate</a><br>Dropped anywhere else? Stay online and head back toward Old Town${b.north ? ", unless you're in north Scottsdale (see above)" : ""}.</span>`;
   } else $("phx").hidden = true;
   const nb = BLOCKS[idx+1];
   $("next").innerHTML = nb ? `Next at <b>${fmtDec(nb.s)}</b>: ${nb.name}${nb.park ? " → " + PARK[nb.park].name : ""}` : "Shift ends at 5:00p.";
