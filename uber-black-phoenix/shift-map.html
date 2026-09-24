@@ -109,7 +109,9 @@ svg{display:block;width:100%;height:auto}
     <h2>Gas in a Suburban</h2>
     <ul class="rules">
       <li>At $4.95 a gallon and about 15 mpg in town, every mile costs you about 33¢. 10 empty miles = $3.30.</li>
-      <li>Idling with the AC on burns $3–4 an hour. Wait with the engine off in shade and start it 5 min before a pickup so the car is cold.</li>
+      <li>Idling with the AC on burns about $3–4 an hour. Driving around looking for rides burns much more, so park and wait.</li>
+      <li>Wait in a covered garage, not an open lot. It stays 15–20° cooler, so you can go longer with the engine off. When it gets too hot, idle with the AC on recirculate. That's cheaper than driving.</li>
+      <li class="ok">When you accept a ride, blast the AC on max recirculate. The drive to the pickup cools the car. If the rider is under 3 minutes away, wait with the engine running.</li>
       <li class="ok">Fill up during the 9:30 lull. Costco and Sam's Club usually run 20–40¢ under the stations near you. <a href="https://www.google.com/maps/search/Costco+Gasoline/@33.50,-111.95,12z" target="_blank" rel="noopener" style="color:var(--go)">Find Costco gas</a></li>
     </ul>
   </section>
@@ -154,7 +156,7 @@ const BLOCKS = [
    tip:""},
   {s:9.5, e:10.5,  label:"9:30", name:"Lull: park and fuel", go:"C", bounce:"C",
    heat:{C:1,A:1,B:1,D:0,E:0,F:0,G:1},
-   why:"This is the slowest hour. Park in shade with the engine off and the app on, eat, and fill up.",
+   why:"This is the slowest hour. Park in the covered garage with the app on, eat, and fill up.",
    tip:"Get gas now, not at 3pm when you'd miss rides."},
   {s:10.5, e:13,   label:"10:30", name:"Checkout wave", go:"B", bounce:"A",
    heat:{B:2,A:2,F:1,C:1,G:1,D:0,E:0},
