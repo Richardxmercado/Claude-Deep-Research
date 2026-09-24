@@ -204,11 +204,11 @@ const OLDTOWN_SET = ["w","valleyho","canopy","andaz","phoenician","shadows","cam
 
 /* ----- plan: Thursday Sept 24, 5am–5pm (Phoenix time, decimal hours) ----- */
 const BLOCKS = [
-  {s:4.75, e:10, label:"4:45", tab:"AM flights", name:"Morning flights", park:"oldtown", bounce:"oldtown", hot:OLDTOWN_SET,
+  {s:4, e:10, label:"4:00", tab:"AM flights", name:"Morning flights", park:"oldtown", bounce:"oldtown", hot:OLDTOWN_SET,
    facts:[
      ["v","Tonight, check Menu → Opportunities in the Driver app for reserved trips. They're posted up to 7 days ahead and the fare is locked when you accept.","s12"],
      ["v","PHX's busiest times are 7–9am and 3–6pm.","s3"],
-     ["i","If riders arrive 1.5–2.5 hrs before a 7–9am flight and the hotel is about 20 min from PHX, they leave about 4:10–7:10am. If 7–9am is when they reach the airport, about 6:40–8:40am. Your 5am start covers nearly all of both.",""],
+     ["i","If riders arrive 1.5–2.5 hrs before a 7–9am flight and the hotel is about 20 min from PHX, they leave about 4:10–7:10am. If 7–9am is when they reach the airport, about 6:40–8:40am. Your 4am start covers all of both.",""],
      ["v","9 upscale hotels and resorts are near this spot (addresses checked): W, Valley Ho, Canopy, Andaz, the Phoenician, Mountain Shadows, Camelback Inn, Montelucia, Sanctuary.",""],
      ["i","All 9 are within about 4 miles, and PHX is about 8 miles, by my map measurements.",""],
      ["v","Old Town street parking is free, with a 3-hour limit only 8am–10pm, so before 8am you can wait at the curb for a faster exit.","s4"],
@@ -320,7 +320,7 @@ function render(){
   const b = BLOCKS[idx];
   $("clock").textContent = fmtClock(t.h, t.m);
   const isLive = pinned == null && live >= 0;
-  $("mode").textContent = isLive ? "Live" : (pinned != null ? "Preview" : "Shift starts 4:45a");
+  $("mode").textContent = isLive ? "Live" : (pinned != null ? "Preview" : "Shift starts 4:00a");
   $("mode").className = "badge" + (isLive ? " live" : "");
   $("back").hidden = pinned == null;
   $("bname").textContent = `${fmtDec(b.s)}–${fmtDec(b.e)} · ${b.name}`;
