@@ -1,0 +1,308 @@
+<title>Shift Map PHX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Deliberately single-theme: a dark, high-contrast screen for a phone mount at 5am and in sun glare. */
+:root{
+  color-scheme:dark;
+  --bg:#0B0D10; --panel:#14171C; --panel2:#1B1F26; --line:#2A3039; --ink:#F3F5F7; --muted:#9AA3AE;
+  --hot:#FF6A2B; --warm:#E3B23C; --cold:#39414D; --go:#3DDC84; --go-ink:#06140C; --road:#4A5361; --water:#2B5A7A; --mtn:#4B3A2E;
+  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{background:var(--bg);color:var(--ink)}
+body{font:15px/1.45 var(--sans);padding-inline:16px;padding-block:12px 40px}
+.wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.now{display:flex;flex-direction:column;gap:8px;padding:16px;border-radius:14px;background:var(--panel);border:1px solid var(--line)}
+.now-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.clock{font:900 40px/1 var(--display);letter-spacing:.01em}
+.badge{font:700 12px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;padding:6px 9px;border-radius:999px;background:var(--panel2);color:var(--muted)}
+.badge.live{background:var(--go);color:var(--go-ink)}
+.block-name{font:900 30px/1 var(--display);text-transform:uppercase;letter-spacing:.02em;color:var(--hot);margin:0}
+.go{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--go);color:var(--go-ink);border-radius:12px;padding:12px 14px;text-decoration:none}
+.go b{font:900 24px/1.05 var(--display);text-transform:uppercase;letter-spacing:.02em;display:block}
+.go small{font:600 13px/1.3 var(--sans);display:block;opacity:.85}
+.go .arrow{font:700 13px/1 var(--sans);background:var(--go-ink);color:var(--go);padding:9px 11px;border-radius:9px;white-space:nowrap}
+.why{margin:0;color:var(--ink)}
+.phx{display:flex;gap:10px;align-items:flex-start;background:var(--panel2);border-radius:10px;padding:10px 12px;font-size:14px}
+.phx .x{flex:none;font:900 15px/1 var(--display);background:var(--cold);color:var(--ink);border-radius:6px;padding:5px 6px;letter-spacing:.04em}
+.phx a{color:var(--go);font-weight:600}
+.next{color:var(--muted);font-size:14px;margin:0}
+.next b{color:var(--ink)}
+.tipline{font-size:14px;margin:0;color:var(--warm)}
+.mapbox{border-radius:14px;overflow:hidden;background:var(--panel);border:1px solid var(--line)}
+svg{display:block;width:100%;height:auto}
+.legend{display:flex;flex-wrap:wrap;gap:12px;padding:10px 14px;font-size:12px;color:var(--muted);border-top:1px solid var(--line)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.strip{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.strip button{font:600 10px/1.15 var(--sans);color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 2px;cursor:pointer;min-width:0}
+.strip button b{display:block;font:800 14px/1 var(--display);color:var(--ink);margin-bottom:3px}
+.strip button[aria-current="true"]{border-color:var(--hot);background:var(--panel2)}
+.strip button.is-now b{color:var(--go)}
+.strip button:focus-visible,.go:focus-visible,a:focus-visible,button:focus-visible{outline:2px solid var(--go);outline-offset:2px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.card h2{font:900 20px/1 var(--display);text-transform:uppercase;letter-spacing:.04em;margin:0}
+.rule-big{font:900 34px/1 var(--display);color:var(--go);letter-spacing:.01em}
+.rules{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.rules li{display:grid;grid-template-columns:22px 1fr;gap:8px;font-size:14px}
+.rules li::before{content:"";width:10px;height:10px;border-radius:2px;background:var(--hot);margin-top:5px}
+.rules li.ok::before{background:var(--go)}
+.spots{display:flex;flex-direction:column}
+.spot{display:grid;grid-template-columns:30px 1fr auto;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.spot:first-child{border-top:0}
+.spot .n{font:900 18px/1 var(--display);width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--cold);color:var(--ink)}
+.spot .n.h2{background:var(--hot);color:#1A0A02} .spot .n.h1{background:var(--warm);color:#1A1402}
+.spot p{margin:0;font-size:13px;color:var(--muted)}
+.spot a{font:700 13px/1 var(--sans);color:var(--go);text-decoration:none;border:1px solid var(--go);border-radius:8px;padding:8px 10px;white-space:nowrap}
+.foot{font-size:12px;color:var(--muted);margin:0}
+.foot a{color:var(--muted)}
+.back{align-self:flex-start;font:600 13px var(--sans);color:var(--go-ink);background:var(--go);border:0;border-radius:8px;padding:8px 12px;cursor:pointer}
+@media (prefers-reduced-motion:no-preference){ .pulse{animation:pulse 1.6s ease-out infinite;transform-box:fill-box;transform-origin:center} @keyframes pulse{0%{opacity:.9;transform:scale(.7)}100%{opacity:0;transform:scale(1.5)}} }
+</style>
+
+<div class="wrap">
+  <section class="now" aria-live="polite">
+    <div class="now-top">
+      <span class="clock" id="clock">--:--</span>
+      <span class="badge" id="mode">Live</span>
+    </div>
+    <h1 class="block-name" id="bname">—</h1>
+    <a class="go" id="go" href="#" target="_blank" rel="noopener">
+      <span><b id="go-title">—</b><small id="go-sub">—</small></span>
+      <span class="arrow">Navigate</span>
+    </a>
+    <p class="why" id="why"></p>
+    <div class="phx" id="phx"></div>
+    <p class="tipline" id="tip"></p>
+    <p class="next" id="next"></p>
+    <button class="back" id="back" hidden>Back to live</button>
+  </section>
+
+  <div class="mapbox">
+    <svg id="map" viewBox="0 0 500 620" role="img" aria-label="Map of the Phoenix area showing where Black riders are for the selected time"></svg>
+    <div class="legend">
+      <span><i style="background:var(--hot)"></i>Hot now</span>
+      <span><i style="background:var(--warm)"></i>Backup</span>
+      <span><i style="background:var(--cold)"></i>Skip</span>
+      <span><i style="background:var(--go)"></i>Go here</span>
+    </div>
+  </div>
+
+  <nav class="strip" id="strip" aria-label="Shift blocks"></nav>
+
+  <section class="card">
+    <h2>10-second rule</h2>
+    <div class="rule-big">Payout $ ≥ total minutes</div>
+    <p class="foot" style="font-size:14px;color:var(--ink)">Add pickup minutes and trip minutes. 8 min + 30 min = 38 min, so it needs $38 or more.</p>
+    <ul class="rules">
+      <li>Pickup over 12 min: skip unless it pays $60+.</li>
+      <li>Ends far out (Buckeye, Surprise, Queen Creek, San Tan, Maricopa, Anthem): needs $1.25 per minute, since you drive back empty.</li>
+      <li>Never drive more than 8 min to chase surge.</li>
+      <li class="ok">Ride ends at PHX: take it, then leave the airport right away for the spot shown above.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Gas in a Suburban</h2>
+    <ul class="rules">
+      <li>At $4.95 a gallon and about 15 mpg in town, every mile costs you about 33¢. 10 empty miles = $3.30.</li>
+      <li>Idling with the AC on burns $3–4 an hour. Wait with the engine off in shade and start it 5 min before a pickup so the car is cold.</li>
+      <li class="ok">Fill up during the 9:30 lull. Costco and Sam's Club usually run 20–40¢ under the stations near you. <a href="https://www.google.com/maps/search/Costco+Gasoline/@33.50,-111.95,12z" target="_blank" rel="noopener" style="color:var(--go)">Find Costco gas</a></li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Spots</h2>
+    <div class="spots" id="spots"></div>
+  </section>
+
+  <p class="foot">Thu Sep 24: Diamondbacks are in Denver, so no Chase Field crowd. High 98–104°F. Five Finger Death Punch plays Talking Stick Amphitheatre tonight, after your shift.
+  This plan is built from Phoenix weekday travel patterns, not Uber's live data. When the surge map in your app disagrees and the surge is within 8 minutes, follow the surge.</p>
+</div>
+
+<script>
+(function(){
+const $ = id => document.getElementById(id);
+
+/* ----- geography (lat, lon) ----- */
+const LON0 = -112.14, LAT0 = 33.712, KX = 1667.8, KY = 2000;
+const P = (lat, lon) => [ +((lon - LON0) * KX).toFixed(1), +((LAT0 - lat) * KY).toFixed(1) ];
+
+const ZONES = {
+  A:{name:"Old Town Scottsdale", short:"Old Town", lat:33.495, lon:-111.927, wait:"Scottsdale Fashion Square garage (shade)", nav:"Scottsdale Fashion Square", note:"W, Valley Ho, Andaz, Canopy and the Old Town hotels"},
+  B:{name:"Camelback resorts", short:"Camelback resorts", lat:33.529, lon:-111.962, wait:"Lincoln Dr & Tatum Blvd", nav:"E Lincoln Dr & N Tatum Blvd, Paradise Valley, AZ", note:"Sanctuary, Mountain Shadows, Omni Montelucia, the Phoenician"},
+  C:{name:"Biltmore", short:"Biltmore", lat:33.510, lon:-112.027, wait:"Biltmore Fashion Park garage (shade)", nav:"Biltmore Fashion Park", note:"Arizona Biltmore, Camby, offices along Camelback"},
+  D:{name:"Downtown hotels", short:"Downtown", lat:33.450, lon:-112.071, wait:"CityScape Phoenix", nav:"CityScape Phoenix", note:"Hyatt Regency, Sheraton Grand, Westin, Kimpton, Convention Center"},
+  E:{name:"Tempe Town Lake", short:"Tempe", lat:33.430, lon:-111.937, wait:"Mill Ave & 5th St", nav:"Mill Ave & 5th St, Tempe, AZ", note:"Corporate offices on the lake and Mill Ave business hotels"},
+  F:{name:"Kierland + Scottsdale Airport", short:"Kierland · SDL", lat:33.623, lon:-111.916, wait:"Kierland Commons garage", nav:"Kierland Commons", note:"Westin Kierland, the Princess, and private-jet terminals at Scottsdale Airport"},
+  G:{name:"Mayo Clinic + Desert Ridge", short:"Mayo · Desert Ridge", lat:33.667, lon:-111.962, wait:"Desert Ridge Marketplace", nav:"Desert Ridge Marketplace", note:"Out-of-town Mayo patients and JW Desert Ridge guests"},
+};
+const PHX = {lat:33.4352, lon:-112.0101};
+
+/* ----- tomorrow's plan (Phoenix local time, decimal hours) ----- */
+const BLOCKS = [
+  {s:4.75, e:7.5,  label:"4:45", name:"Early flights", go:"A", bounce:"D",
+   heat:{A:2,B:2,C:1,F:1,D:1,E:0,G:0},
+   why:"Business travelers flying home Thursday leave hotels for 6–9am flights. These hotel-to-PHX rides pay $35–60 each.",
+   tip:"Tonight: open Scheduled trips in the Driver app and take any 5–7am airport pickups."},
+  {s:7.5, e:9.5,   label:"7:30", name:"Morning meetings", go:"E", bounce:"E",
+   heat:{D:2,E:2,C:1,A:1,B:1,F:0,G:1},
+   why:"Downtown and Tempe business hotels send people to offices and meetings. Both are under 5 miles from PHX, so you get back to work fast after an airport drop.",
+   tip:""},
+  {s:9.5, e:10.5,  label:"9:30", name:"Lull: park and fuel", go:"C", bounce:"C",
+   heat:{C:1,A:1,B:1,D:0,E:0,F:0,G:1},
+   why:"This is the slowest hour. Park in shade with the engine off and the app on, eat, and fill up.",
+   tip:"Get gas now, not at 3pm when you'd miss rides."},
+  {s:10.5, e:13,   label:"10:30", name:"Checkout wave", go:"B", bounce:"A",
+   heat:{B:2,A:2,F:1,C:1,G:1,D:0,E:0},
+   why:"Resorts check out at 11am–noon. Guests who stayed Monday to Thursday head to PHX. Wait between the Camelback resorts.",
+   tip:""},
+  {s:13, e:15,     label:"1:00", name:"North Scottsdale", go:"F", bounce:"A",
+   heat:{F:2,G:2,A:1,B:1,C:0,D:0,E:0},
+   why:"Afternoon flights out of the Princess and Kierland, private-jet arrivals at Scottsdale Airport for the weekend, and Mayo patients going home. These are long rides to PHX.",
+   tip:""},
+  {s:15, e:16.25,  label:"3:00", name:"Late checkouts, happy hour", go:"A", bounce:"C",
+   heat:{A:2,C:1,B:1,F:1,E:1,D:0,G:0},
+   why:"Old Town fills up for Thursday happy hour, and late-checkout guests head for evening flights.",
+   tip:""},
+  {s:16.25, e:17,  label:"4:15", name:"Ride home", go:null, bounce:null,
+   heat:{A:1,B:0,C:1,D:0,E:0,F:0,G:0},
+   why:"Turn on the destination filter toward home. Your last ride pays for the drive home instead of 20 empty miles.",
+   tip:"You get two destination filters a day. Save one for this."},
+];
+
+/* ----- helpers ----- */
+function miles(a, b){
+  const R = 3958.8, toR = x => x*Math.PI/180;
+  const dLat = toR(b.lat-a.lat), dLon = toR(b.lon-a.lon);
+  const h = Math.sin(dLat/2)**2 + Math.cos(toR(a.lat))*Math.cos(toR(b.lat))*Math.sin(dLon/2)**2;
+  return 2*R*Math.asin(Math.sqrt(h)) * 1.3; // road factor
+}
+const GAS_PER_MILE = 4.95/15;
+const navUrl = q => "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(q);
+function phoenixNow(){
+  const parts = new Intl.DateTimeFormat("en-US",{timeZone:"America/Phoenix",hour:"numeric",minute:"2-digit",hour12:false}).formatToParts(new Date());
+  const h = +parts.find(p=>p.type==="hour").value % 24, m = +parts.find(p=>p.type==="minute").value;
+  return {h, m, dec:h + m/60};
+}
+function fmtClock(h, m){ const ap = h>=12?"p":"a"; const hh = h%12===0?12:h%12; return hh + ":" + String(m).padStart(2,"0") + ap; }
+function fmtDec(d){ const h = Math.floor(d), m = Math.round((d-h)*60); return fmtClock(h, m); }
+
+/* ----- static map layers ----- */
+const ROADS = [
+  {n:"17", pts:[[33.72,-112.115],[33.56,-112.115],[33.465,-112.113],[33.44,-112.105],[33.425,-112.08],[33.418,-112.04],[33.413,-112.0]], lab:[33.58,-112.115]},
+  {n:"10", pts:[[33.462,-112.2],[33.462,-112.113],[33.462,-112.075],[33.462,-112.04],[33.445,-112.03],[33.425,-112.015],[33.413,-111.99],[33.40,-111.968],[33.37,-111.966],[33.33,-111.966]], lab:[33.462,-112.125]},
+  {n:"51", pts:[[33.462,-112.04],[33.49,-112.035],[33.515,-112.03],[33.56,-112.03],[33.61,-112.03],[33.672,-112.03]], lab:[33.585,-112.03]},
+  {n:"202", pts:[[33.462,-112.04],[33.455,-112.0],[33.452,-111.97],[33.438,-111.945],[33.432,-111.92],[33.436,-111.895],[33.44,-111.87],[33.44,-111.80]], lab:[33.446,-111.87]},
+  {n:"101", pts:[[33.672,-112.2],[33.672,-112.03],[33.671,-111.975],[33.662,-111.93],[33.64,-111.895],[33.60,-111.89],[33.55,-111.89],[33.50,-111.89],[33.44,-111.89],[33.36,-111.89]], lab:[33.54,-111.89]},
+  {n:"60", pts:[[33.395,-111.967],[33.388,-111.90],[33.386,-111.80]], lab:[33.389,-111.87]},
+];
+function drawStatic(){
+  let s = "";
+  // Salt River / Tempe Town Lake
+  const lake = [[33.428,-111.975],[33.431,-111.955],[33.432,-111.935],[33.432,-111.915]].map(p=>P(...p).join(",")).join(" ");
+  s += `<polyline points="${lake}" fill="none" stroke="#2B5A7A" stroke-width="7" stroke-linecap="round"/>`;
+  // Camelback Mountain
+  const [mx,my] = P(33.515,-111.962);
+  s += `<ellipse cx="${mx}" cy="${my}" rx="26" ry="11" fill="#4B3A2E"/>`;
+  ROADS.forEach(r => {
+    const pts = r.pts.map(p=>P(...p).join(",")).join(" ");
+    s += `<polyline points="${pts}" fill="none" stroke="#4A5361" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+  });
+  ROADS.forEach(r => {
+    const [x,y] = P(...r.lab); const w = r.n.length>2?30:24;
+    s += `<rect x="${x-w/2}" y="${y-10}" width="${w}" height="20" rx="4" fill="#0B0D10" stroke="#4A5361" stroke-width="1.5"/><text x="${x}" y="${y+5}" font-size="13" font-weight="700" fill="#C9D0D8" text-anchor="middle" font-family="IBM Plex Sans, system-ui, sans-serif">${r.n}</text>`;
+  });
+  return s;
+}
+const STATIC = drawStatic();
+
+function drawMap(b){
+  let s = STATIC;
+  // PHX: drop-off only
+  const [px,py] = P(PHX.lat, PHX.lon);
+  s += `<rect x="${px-22}" y="${py-14}" width="44" height="28" rx="6" fill="#20252D" stroke="#5B6573" stroke-width="1.5"/><text x="${px}" y="${py+6}" font-size="16" font-weight="800" fill="#C9D0D8" text-anchor="middle" font-family="Big Shoulders Display, Arial Narrow, Impact, sans-serif">PHX</text>`;
+  s += `<text x="${px}" y="${py+32}" font-size="12" fill="#9AA3AE" text-anchor="middle" font-family="IBM Plex Sans, system-ui, sans-serif">drop off, don't wait</text>`;
+  // bounce arrow from PHX
+  if(b.bounce){
+    const z = ZONES[b.bounce]; const [bx,by] = P(z.lat,z.lon);
+    const ang = Math.atan2(by-py, bx-px), sx = px + Math.cos(ang)*28, sy = py + Math.sin(ang)*20, ex = bx - Math.cos(ang)*34, ey = by - Math.sin(ang)*34;
+    s += `<line x1="${sx.toFixed(1)}" y1="${sy.toFixed(1)}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="#3DDC84" stroke-width="3" stroke-dasharray="6 5" marker-end="url(#arr)"/>`;
+  }
+  // zones, coldest first so hot ones sit on top
+  const ids = Object.keys(ZONES).sort((a,c)=>(b.heat[a]||0)-(b.heat[c]||0));
+  ids.forEach(id => {
+    const z = ZONES[id], lvl = b.heat[id]||0, [x,y] = P(z.lat,z.lon);
+    const r = [22,30,38][lvl], fill = ["#39414D","#E3B23C","#FF6A2B"][lvl], op = [0.55,0.55,0.62][lvl];
+    s += `<circle cx="${x}" cy="${y}" r="${r}" fill="${fill}" fill-opacity="${op}" stroke="${fill}" stroke-width="2"/>`;
+    if(b.go === id){
+      s += `<circle class="pulse" cx="${x}" cy="${y}" r="${r+6}" fill="none" stroke="#3DDC84" stroke-width="4"/>`;
+      s += `<circle cx="${x}" cy="${y}" r="${r+6}" fill="none" stroke="#3DDC84" stroke-width="4"/>`;
+      s += `<text x="${x}" y="${y+7}" font-size="20" font-weight="900" fill="#06140C" text-anchor="middle" font-family="Big Shoulders Display, Arial Narrow, Impact, sans-serif">GO</text>`;
+    }
+  });
+  ids.forEach(id => {
+    const z = ZONES[id], lvl = b.heat[id]||0, [x,y] = P(z.lat,z.lon), r = [22,30,38][lvl] + (b.go===id?6:0);
+    const above = id==="B" || id==="G";
+    const ty = above ? y - r - 8 : y + r + 17;
+    s += `<text x="${x}" y="${ty}" font-size="${lvl===2?16:14}" font-weight="700" fill="${lvl===0?"#8B94A0":"#F3F5F7"}" text-anchor="middle" font-family="IBM Plex Sans, system-ui, sans-serif" stroke="#0B0D10" stroke-width="4" paint-order="stroke">${z.short}</text>`;
+  });
+  $("map").innerHTML = `<defs><marker id="arr" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3DDC84"/></marker></defs>` + s;
+}
+
+/* ----- render ----- */
+let pinned = null; // index the driver tapped, or null for live
+function currentIndex(dec){
+  const i = BLOCKS.findIndex(b => dec >= b.s && dec < b.e);
+  return i;
+}
+function render(){
+  const t = phoenixNow();
+  const liveIdx = currentIndex(t.dec);
+  const idx = pinned != null ? pinned : (liveIdx >= 0 ? liveIdx : 0);
+  const b = BLOCKS[idx];
+  $("clock").textContent = fmtClock(t.h, t.m);
+  const isLive = pinned == null && liveIdx >= 0;
+  $("mode").textContent = isLive ? "Live" : (pinned != null ? "Preview" : "Shift starts 4:45a");
+  $("mode").className = "badge" + (isLive ? " live" : "");
+  $("back").hidden = pinned == null;
+  $("bname").textContent = `${fmtDec(b.s)}–${fmtDec(b.e)} · ${b.name}`;
+  if(b.go){
+    const z = ZONES[b.go];
+    $("go").hidden = false;
+    $("go").href = navUrl(z.nav);
+    $("go-title").textContent = z.name;
+    $("go-sub").textContent = "Wait at: " + z.wait;
+  } else {
+    $("go").hidden = true;
+  }
+  $("why").textContent = b.why;
+  if(b.bounce){
+    const z = ZONES[b.bounce], mi = miles(PHX, z);
+    $("phx").hidden = false;
+    $("phx").innerHTML = `<span class="x">PHX</span><span>Dropped at the airport? Don't join the line. Head to <b>${z.name}</b>: ${mi.toFixed(0)} mi, about $${(mi*GAS_PER_MILE).toFixed(2)} in gas. <a href="${navUrl(z.nav)}" target="_blank" rel="noopener">Navigate</a></span>`;
+  } else $("phx").hidden = true;
+  $("tip").textContent = b.tip; $("tip").hidden = !b.tip;
+  const nb = BLOCKS[idx+1];
+  $("next").innerHTML = nb ? `Next at <b>${fmtDec(nb.s)}</b>: ${nb.name}${nb.go ? " → " + ZONES[nb.go].name : ""}` : "Shift ends at 5:00p.";
+  drawMap(b);
+  $("strip").innerHTML = BLOCKS.map((x,i)=>`<button data-i="${i}" aria-current="${i===idx}" class="${i===liveIdx?"is-now":""}"><b>${x.label}</b>${x.go?ZONES[x.go].short.split(" ")[0]:"Home"}</button>`).join("");
+  $("spots").innerHTML = Object.entries(ZONES).map(([id,z]) => {
+    const lvl = b.heat[id]||0;
+    return `<div class="spot"><span class="n h${lvl}">${id}</span><div><b>${z.name}</b><p>${z.note}. Wait at ${z.wait}.</p></div><a href="${navUrl(z.nav)}" target="_blank" rel="noopener">Go</a></div>`;
+  }).join("");
+}
+$("strip").addEventListener("click", e => {
+  const btn = e.target.closest("button[data-i]"); if(!btn) return;
+  const i = +btn.dataset.i; const live = currentIndex(phoenixNow().dec);
+  pinned = (i === live) ? null : i; render();
+});
+$("back").addEventListener("click", () => { pinned = null; render(); });
+render();
+setInterval(() => { if(pinned == null) render(); else $("clock").textContent = (t => fmtClock(t.h,t.m))(phoenixNow()); }, 30000);
+try{ navigator.wakeLock && navigator.wakeLock.request("screen").catch(()=>{}); }catch(e){}
+})();
+</script>
