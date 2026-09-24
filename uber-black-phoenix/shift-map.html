@@ -183,8 +183,8 @@ const P = (lat, lon) => [ +((lon - LON0) * KX).toFixed(1), +((LAT1 - lat) * KY).
 
 /* ----- parking spots (verified free public parking) ----- */
 const PARK = {
-  oldtown:{name:"2nd St & Brown Ave lot + garage", area:"Old Town Scottsdale", addr:"3806 N Brown Ave, Scottsdale", lat:33.4920, lon:-111.9240,
-    note:"Public city lot + underground garage. Free. Park where the Uber app still shows your location.", src:"s4"},
+  oldtown:{name:"Old Town Scottsdale", area:"Old Town Scottsdale", addr:"N Scottsdale Rd & E Indian School Rd, Scottsdale", lat:33.4948, lon:-111.9261,
+    note:"Curbside on Scottsdale Rd between Indian School and Camelback. Street parking is free, with a 3-hour limit 8am–10pm. When it's hot, use the 2nd St & Brown Ave city lot and garage (3806 N Brown Ave).", src:"s4"},
   kierland:{name:"Kierland Commons garage", area:"Scottsdale Rd & Greenway", addr:"Kierland Commons, 15210 N Scottsdale Rd, Scottsdale", lat:33.6245, lon:-111.9285,
     note:"Free shopping-center garage, NW side behind Platella. About 1/2 mile from Westin Kierland.", src:"s5"},
 };
@@ -230,7 +230,8 @@ const BLOCKS = [
      ["v","PHX's second busy period is 3–6pm.","s3"],
      ["i","Same math as the morning: hotel pickups run about 12:10–5:40pm, so the whole afternoon until you head home is in the window.",""],
      ["v","Shade kept a parked car about 16°F cooler inside after an hour in Tempe heat.","s9"],
-     ["i","The underground garage is the shadiest spot, but it can block GPS. Park near the entrance ramp and check that the Uber app still shows your location. If it doesn't, use the surface lot.","s17"]]},
+     ["i","Cloudy or cool: stay curbside, since it's the fastest exit with no GPS risk. Hot sun: use the 2nd St & Brown garage near the ramp, and check that the Uber app still shows your location.","s17"],
+     ["v","Street parking has a 3-hour limit 8am–10pm, so move within 3 hours.","s4"]]},
   {s:16.25, e:17, label:"4:15", tab:"Home", name:"Ride home", park:null, bounce:null, hot:[],
    facts:[
      ["v","You get 2 destination filters a day. Several trips toward the same destination count as one.","s11"],
