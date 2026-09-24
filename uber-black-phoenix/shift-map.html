@@ -91,8 +91,8 @@ h2{font:900 20px/1 var(--display);text-transform:uppercase;letter-spacing:.04em;
   <nav class="strip" id="strip" aria-label="Shift blocks"></nav>
 
   <section class="card" id="msgs">
-    <h2>Pre-ride messages</h2>
-    <p class="foot" style="font-size:13px">Tap Copy, paste into the Uber chat, and change NAME. The card line lets quiet or 4am riders take your card without a conversation. It's a written mention on Uber's platform, so it carries some account risk. The last version doesn't mention a card.</p>
+    <h2>Pre-ride message</h2>
+    <p class="foot" style="font-size:13px">Tap Copy, paste into the Uber chat, and change NAME. Built only from your original message, plus the scheduled-rides line.</p>
     <div id="msg-list" style="display:flex;flex-direction:column;gap:10px"></div>
   </section>
 
@@ -139,7 +139,7 @@ h2{font:900 20px/1 var(--display);text-transform:uppercase;letter-spacing:.04em;
   <section class="card">
     <h2>Gas and heat</h2>
     <ul class="facts">
-      <li class="v"><span class="t">✓</span><span>Suburban with the 5.3L V8 (the usual engine; check yours): EPA 14–15 mpg city.<sup><a href="#s6">6</a></sup> At $4.95 that's <b>33–35¢ every mile</b>. 10 empty miles ≈ $3.40.</span></li>
+      <li class="v"><span class="t">✓</span><span>Suburban with the 5.3L V8: EPA 14–15 mpg city for the 2024–25 models. I haven't confirmed your 2026's engine or rating, so check your door sticker or fueleconomy.gov.<sup><a href="#s6">6</a></sup> At $4.95 that's <b>33–35¢ every mile</b>. 10 empty miles ≈ $3.40.</span></li>
       <li class="v"><span class="t">✓</span><span>Phoenix-area average regular was <b>$4.70</b> on Sept 18.<sup><a href="#s7">7</a></sup> You're paying $4.89–5.00, which is 19–30¢ over, or about $4.75–7.50 per 25 gallons.</span></li>
       <li class="v"><span class="t">✓</span><span>Costco gas at <b>15255 N Hayden Rd</b> is about 1.5 miles from the Kierland garage by my estimate (membership required).<sup><a href="#s8">8</a></sup> Check GasBuddy for its price. Fill up there only when a trip already takes you north.</span></li>
       <li class="v"><span class="t">✓</span><span>In Tempe heat, a car parked 1 hour in shade had about 100°F inside, vs 116°F in sun. Seats were 105°F vs 123°F.<sup><a href="#s9">9</a></sup></span></li>
@@ -224,7 +224,7 @@ const BLOCKS = [
      ["v","The Phoenician and Sanctuary check out at 11am, and so do Westin Kierland and the Fairmont Princess up north.","s2"],
      ["i","Stay in Old Town. Driving up to Kierland and back is about 24 miles (≈$8 gas, by my map estimate), and one LA driver's own data paid more per hour on short trips ($118/hr at 0–2 mi) than long ones ($80/hr at 20+ mi).","s16"],
      ["i","Exception: if a trip leaves you in north Scottsdale during this block, park at the Kierland Commons garage instead of driving back empty. It's free shopping-center parking; if security asks you to move, move.","s5"],
-     ["i","Need gas while you're up there? Costco at 15255 N Hayden Rd is about 1.5 miles from that garage (membership required). A special trip from Old Town (about 24 miles round trip, ≈$8) only pays off if Costco is at least 32¢ a gallon cheaper than your usual station on a 25-gallon fill.","s8"]]},
+     ["i","Need gas while you're up there? Costco at 15255 N Hayden Rd is about 1.5 miles from that garage (membership required). A special trip from Old Town (about 24 miles round trip, ≈$8) only pays off if Costco is at least 32¢ a gallon cheaper than your usual station, assuming a 25-gallon fill (adjust for yours).","s8"]]},
   {s:12.25, e:16.25, label:"12:15", tab:"PM flights", name:"Afternoon flights", park:"oldtown", bounce:"oldtown", hot:OLDTOWN_SET,
    facts:[
      ["v","PHX's second busy period is 3–6pm.","s3"],
@@ -359,10 +359,7 @@ try{ navigator.wakeLock && navigator.wakeLock.request("screen").catch(()=>{}); }
 
 /* ----- Pre-ride messages with copy buttons ----- */
 const MSGS = [
-  {t:"Standard", m:"Hi NAME, this is Richard, your Uber Black driver in a black Chevy Suburban. Cold water and chargers are inside, and I'll take care of your bags. Any temperature or music you'd like? Just reply here. If you enjoy the ride and want the same driver next time, my card is in the seat pocket. See you shortly."},
-  {t:"Hotel or airport pickup", m:"Hi NAME, this is Richard, your Uber Black driver in a black Chevy Suburban. I'll be at the main entrance and will load your bags. Cold water and chargers are inside. If you enjoy the ride and want the same driver for future airport trips, my card is in the seat pocket. See you shortly."},
-  {t:"Group of 5 or more", m:"Hi NAME, this is Richard, your Uber Black driver in a black Chevy Suburban with room for everyone. For the third row, lift the lever on the captain's chair twice and it slides forward. I'll handle the bags. If you enjoy the ride, my card is in the seat pocket. See you shortly."},
-  {t:"Lower-risk version (no card mention)", m:"Hi NAME, this is Richard, your Uber Black driver in a black Chevy Suburban. Cold water and chargers are inside, and I'll take care of your bags. Any temperature or music you'd like? Just reply here. If you enjoy the ride and want me as your driver again, just ask before you step out. See you shortly."},
+  {t:"Your message", m:"Hi NAME, this is Richard, your Uber Black driver. I'll be picking you up in a 2026 Chevy Suburban. I'm happy to open and close the trunk for you. Want a certain temperature or music? Just let me know. If you use Spotify, feel free to join the Jam. Also, no vaping in the car. If you enjoy the ride, I also do scheduled rides, so just ask me for my info. See you soon!"},
 ];
 $("msg-list").innerHTML = MSGS.map((x,i) => `<div style="border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:6px">
   <div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><b style="font-size:14px">${x.t}</b><button class="back" data-copy="${i}" style="padding:6px 12px">Copy</button></div>
