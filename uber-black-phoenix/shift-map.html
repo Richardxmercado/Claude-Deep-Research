@@ -90,6 +90,20 @@ h2{font:900 20px/1 var(--display);text-transform:uppercase;letter-spacing:.04em;
 
   <nav class="strip" id="strip" aria-label="Shift blocks"></nav>
 
+  <section class="card" id="mine">
+    <h2>Your trips: what actually paid</h2>
+    <p class="foot" style="font-size:14px;color:var(--ink)">Load your Uber trip file and this shows which hours and pickup spots made you the most. The file stays on your phone and is never uploaded.</p>
+    <ol class="src" style="font-size:13px;color:var(--ink)">
+      <li>On a browser, go to <b>drivers.uber.com</b> or Uber's "Download your data" page and request your data. Uber emails a zip when it's ready.</li>
+      <li>Unzip it (the Files app does this on iPhone) and pick <b>driver_lifetime_trips.csv</b> below.</li>
+    </ol>
+    <label class="back" style="display:inline-block;cursor:pointer" for="csv">Load trip file (.csv)</label>
+    <input id="csv" type="file" accept=".csv,text/csv" hidden>
+    <p class="foot" id="csv-status">No file loaded yet.</p>
+    <div id="csv-map" hidden></div>
+    <div id="mine-out" style="display:flex;flex-direction:column;gap:12px"></div>
+  </section>
+
   <section class="card">
     <div class="key">
       <span><span class="t" style="background:#3DDC84;color:#06140C">✓</span>Checked against a source</span>
@@ -112,6 +126,7 @@ h2{font:900 20px/1 var(--display);text-transform:uppercase;letter-spacing:.04em;
     <ul class="facts">
       <li class="i"><span class="t">≈</span><span>Pickup minutes + trip minutes. 8 + 30 = 38, so it needs $38+. That works out to at least $60/hr for every minute you're on a trip. This is arithmetic, not market data.</span></li>
       <li class="i"><span class="t">≈</span><span>Pickup over 12 minutes: only if it pays $60+.</span></li>
+      <li class="v"><span class="t">✓</span><span>Apps like GigU, Para and Maxymo grade offers automatically, but Uber says automation tools that access its app aren't allowed, and Lyft has warned drivers using them of deactivation.<sup><a href="#s15">15</a></sup> Not worth risking a Black account. This rule does the same job in your head.</span></li>
     </ul>
   </section>
 
@@ -143,6 +158,8 @@ h2{font:900 20px/1 var(--display);text-transform:uppercase;letter-spacing:.04em;
       <li id="s12"><a href="https://therideshareguy.com/uber-reserve/" target="_blank" rel="noopener">Uber Reserve for drivers: Opportunities in the app menu, up to 7 days ahead, fare locked</a></li>
       <li id="s13"><a href="https://gridwise.io/blog/uber-and-lyft-driver-instructions-for-phoenix-sky-harbor-international-airport-phx" target="_blank" rel="noopener">PHX: rideshare drivers may wait only in staging lots</a></li>
       <li id="s14"><a href="https://tourism.az.gov/phoenix-area-hotel-occupancy-climbs-to-49-1/" target="_blank" rel="noopener">Arizona Office of Tourism hotel data</a> · <a href="https://hotelguru.com/articles/hotel-market-outlook-2026/" target="_blank" rel="noopener">Phoenix weekday occupancy runs above weekend</a></li>
+      <li id="s15"><a href="https://thehustle.co/news/the-third-party-apps-uber-and-lyft-are-trying-to-kill" target="_blank" rel="noopener">The Hustle: third-party driver apps Uber and Lyft are trying to kill</a> · <a href="https://therideshareguy.com/weekly-roundup-lyft-threatens-driver-deactivation-over-third-party-earnings-apps/" target="_blank" rel="noopener">Lyft deactivation warning</a></li>
+      <li id="s16"><a href="https://github.com/evgeniimatveev/uber-driver-analytics" target="_blank" rel="noopener">GitHub: uber-driver-analytics (one LA driver, 3,448 trips)</a> · <a href="https://github.com/joshur19/uber-heatmap" target="_blank" rel="noopener">uber-heatmap</a></li>
     </ol>
     <p class="foot">Uber doesn't publish where Black requests happen by hour. The fastest way to replace my ≈ items with facts is your own trip history: drivers.uber.com lists request time and pickup location for every trip.</p>
   </section>
@@ -197,7 +214,7 @@ const BLOCKS = [
    facts:[
      ["v","Westin Kierland and the Fairmont Princess both check out at 11am.","s2"],
      ["v","Costco gas (15255 N Hayden Rd) is about 1.5 miles away. Fill up here instead of paying $4.89–5.00.","s8"],
-     ["i","Kierland to PHX is about 18 road miles, about twice an Old Town airport run. Fares pay per mile and minute.",""],
+     ["i","Kierland to PHX is about 18 road miles, roughly double an Old Town airport run, so a bigger fare. But you drive back empty, and one LA Black-tier driver's 3,448 trips paid $118/hr on 0–2 mi trips vs $80/hr on 20+ mi. Check your own numbers in Your trips.","s16"],
      ["i","Backup: the Phoenician and Sanctuary also check out at 11am. If you're south, use the Old Town garage instead.","s2"]]},
   {s:12.25, e:16.25, label:"12:15", tab:"Old Town", name:"Afternoon flights", park:"oldtown", bounce:"oldtown", hot:OLDTOWN_SET,
    facts:[
@@ -329,5 +346,145 @@ $("back").addEventListener("click", () => { pinned = null; render(); });
 render();
 setInterval(() => { if(pinned == null) render(); else { const t = phoenixNow(); $("clock").textContent = fmtClock(t.h,t.m); } }, 30000);
 try{ navigator.wakeLock && navigator.wakeLock.request("screen").catch(()=>{}); }catch(e){}
+
+/* ----- Your trips: analyze Uber's driver_lifetime_trips.csv in the browser ----- */
+function parseCSV(text){
+  const rows = []; let row = [], f = "", q = false;
+  for(let i = 0; i < text.length; i++){
+    const c = text[i];
+    if(q){ if(c === '"'){ if(text[i+1] === '"'){ f += '"'; i++; } else q = false; } else f += c; }
+    else if(c === '"') q = true;
+    else if(c === ","){ row.push(f); f = ""; }
+    else if(c === "\n" || c === "\r"){ if(c === "\r" && text[i+1] === "\n") i++; row.push(f); rows.push(row); row = []; f = ""; }
+    else f += c;
+  }
+  if(f !== "" || row.length){ row.push(f); rows.push(row); }
+  return rows.filter(r => r.some(x => x.trim() !== ""));
+}
+// Uber doesn't document this file's columns, so match headers by pattern and let the driver fix any miss.
+const ROLES = {
+  time:{label:"Trip time", re:[/request.*(time|timestamp)/i, /begin.*trip.*(time|timestamp)/i, /(start|pickup).*(time|timestamp)/i, /timestamp/i, /date/i], need:true},
+  pay:{label:"Earnings", re:[/driver.*(earn|pay)/i, /earning/i, /(total|net).*(pay|fare|earn)/i, /original.*fare/i, /fare.*amount/i, /fare/i, /amount/i], need:true},
+  lat:{label:"Pickup latitude", re:[/begin.*trip.*lat/i, /(pickup|request|start).*lat/i, /^lat/i], need:false},
+  lng:{label:"Pickup longitude", re:[/begin.*trip.*(lng|lon)/i, /(pickup|request|start).*(lng|lon)/i, /^(lng|lon)/i], need:false},
+  miles:{label:"Distance", re:[/distance/i, /miles/i], need:false},
+  mins:{label:"Duration", re:[/duration/i, /minutes/i], need:false},
+  status:{label:"Status", re:[/status/i], need:false},
+};
+function detect(headers){
+  const m = {};
+  Object.entries(ROLES).forEach(([k,r]) => {
+    for(const re of r.re){ const i = headers.findIndex((h,j) => re.test(h) && !Object.values(m).includes(j)); if(i >= 0){ m[k] = i; break; } }
+  });
+  return m;
+}
+function toPhx(raw, utcHeader){
+  const s = String(raw||"").trim();
+  const d = s.match(/(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/) || s.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})[ ,]+(\d{1,2}):(\d{2})/);
+  if(!d) return null;
+  let y, mo, da, h = +d[4], mi = +d[5];
+  if(d[0].includes("/")){ mo = +d[1]; da = +d[2]; y = +d[3]; if(/pm/i.test(s) && h < 12) h += 12; if(/am/i.test(s) && h === 12) h = 0; }
+  else { y = +d[1]; mo = +d[2]; da = +d[3]; }
+  let t = Date.UTC(y, mo-1, da, h, mi);
+  const isUtc = utcHeader || /(Z|UTC|\+00:?00)\s*$/i.test(s) || /\bUTC\b/.test(s);
+  if(isUtc) t -= 7*3600e3; // Arizona is UTC-7 all year
+  const z = new Date(t);
+  return {day: z.getUTCDay(), hour: z.getUTCHours(), key: z.toISOString().slice(0,10)};
+}
+const money = n => "$" + Math.round(n).toLocaleString("en-US");
+let csvRows = null, csvHead = null;
+$("csv").addEventListener("change", e => {
+  const file = e.target.files && e.target.files[0]; if(!file) return;
+  const rd = new FileReader();
+  rd.onload = () => {
+    const rows = parseCSV(String(rd.result));
+    if(rows.length < 2){ $("csv-status").textContent = "That file has no trip rows. Pick driver_lifetime_trips.csv from the Uber download."; return; }
+    csvHead = rows[0].map(h => h.trim()); csvRows = rows.slice(1);
+    analyze(detect(csvHead));
+  };
+  rd.onerror = () => { $("csv-status").textContent = "Couldn't read that file. Try picking it again."; };
+  rd.readAsText(file);
+});
+function columnPicker(m){
+  return `<div class="facts" style="gap:8px">` + Object.entries(ROLES).map(([k,r]) =>
+    `<label style="display:grid;grid-template-columns:120px 1fr;gap:8px;align-items:center;font-size:13px">${r.label}${r.need?" *":""}
+      <select data-role="${k}" style="font:13px var(--sans);background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px;min-width:0">
+        <option value="">(none)</option>${csvHead.map((h,i)=>`<option value="${i}" ${m[k]===i?"selected":""}>${h.replace(/</g,"&lt;")}</option>`).join("")}
+      </select></label>`).join("") + `</div>`;
+}
+$("mine-out").addEventListener("change", e => {
+  const sel = e.target.closest("select[data-role]"); if(!sel) return;
+  const m = {}; $("mine-out").querySelectorAll("select[data-role]").forEach(s => { if(s.value !== "") m[s.dataset.role] = +s.value; });
+  analyze(m);
+});
+function analyze(m){
+  const utcTime = m.time != null && /utc/i.test(csvHead[m.time]);
+  const trips = [];
+  for(const r of csvRows){
+    if(m.status != null && r[m.status] && !/complete/i.test(r[m.status])) continue;
+    const t = m.time != null ? toPhx(r[m.time], utcTime) : null;
+    const pay = m.pay != null ? parseFloat(String(r[m.pay]).replace(/[^0-9.\-]/g,"")) : NaN;
+    if(!t || !isFinite(pay)) continue;
+    const lat = m.lat != null ? parseFloat(r[m.lat]) : NaN, lng = m.lng != null ? parseFloat(r[m.lng]) : NaN;
+    const mi = m.miles != null ? parseFloat(r[m.miles]) : NaN, mn = m.mins != null ? parseFloat(r[m.mins]) : NaN;
+    trips.push({...t, pay, lat, lng, mi, mn});
+  }
+  const picker = `<details ${(m.time==null||m.pay==null||!trips.length)?"open":""} style="font-size:13px"><summary style="cursor:pointer;color:var(--muted)">Columns used (change if a number looks wrong)</summary>${columnPicker(m)}</details>`;
+  if(!trips.length){
+    $("csv-status").textContent = "I couldn't match the time and earnings columns. Pick them below.";
+    $("mine-out").innerHTML = picker; $("csv-map").hidden = true; return;
+  }
+  const days = new Set(trips.map(t => t.key));
+  $("csv-status").textContent = `${trips.length} completed trips across ${days.size} days loaded.`;
+
+  // hour × weekday: average $ earned in that clock hour, on the days you drove it
+  const DOW = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"], HOURS = []; for(let h = 4; h <= 20; h++) HOURS.push(h);
+  const cell = {};
+  trips.forEach(t => { const d = (t.day+6)%7, k = d+"-"+t.hour; const c = cell[k] ||= {sum:0, days:new Set()}; c.sum += t.pay; c.days.add(t.key); });
+  const vals = Object.values(cell).map(c => c.sum / c.days.size), max = Math.max(...vals, 1);
+  const shade = v => { const a = Math.min(1, v/max); return `rgba(255,106,43,${(0.12 + a*0.88).toFixed(2)})`; };
+  let grid = `<div style="overflow-x:auto"><table style="border-collapse:separate;border-spacing:2px;width:100%;font:12px var(--sans);font-variant-numeric:tabular-nums"><tr><th></th>${DOW.map(d=>`<th style="color:var(--muted);font-weight:600">${d}</th>`).join("")}</tr>`;
+  HOURS.forEach(h => {
+    grid += `<tr><th style="color:var(--muted);font-weight:600;text-align:right;padding-right:4px;white-space:nowrap">${fmtClock(h,0)}</th>` + DOW.map((_,d) => {
+      const c = cell[d+"-"+h]; if(!c) return `<td style="background:#1B1F26;height:26px"></td>`;
+      const v = c.sum / c.days.size;
+      return `<td title="${c.days.size} day(s)" style="background:${shade(v)};height:26px;text-align:center;color:${v/max>0.55?"#1A0A02":"#F3F5F7"};font-weight:600">${money(v)}</td>`;
+    }).join("") + `</tr>`;
+  });
+  grid += `</table></div><p class="foot">Each cell: average earned from trips starting in that hour, on days you drove that hour. Darker = more.</p>`;
+
+  // top pickup spots (~0.7-mile squares)
+  const withLoc = trips.filter(t => isFinite(t.lat) && isFinite(t.lng) && Math.abs(t.lat) > 1);
+  let spots = "";
+  if(withLoc.length){
+    const g = {};
+    withLoc.forEach(t => { const k = (Math.round(t.lat*100)/100)+","+(Math.round(t.lng*100)/100); const s = g[k] ||= {n:0,sum:0,la:0,ln:0}; s.n++; s.sum += t.pay; s.la += t.lat; s.ln += t.lng; });
+    const top = Object.values(g).sort((a,b) => b.sum - a.sum).slice(0,6);
+    spots = `<h2 style="font-size:17px">Your best pickup spots</h2><div class="facts">` + top.map((s,i) => {
+      const la = (s.la/s.n).toFixed(4), ln = (s.ln/s.n).toFixed(4);
+      return `<div style="display:flex;justify-content:space-between;gap:10px;align-items:center;font-size:14px;border-top:1px solid var(--line);padding-top:8px"><span><b>#${i+1}</b> ${money(s.sum)} from ${s.n} trips · avg ${money(s.sum/s.n)}</span><a href="https://www.google.com/maps/search/?api=1&query=${la},${ln}" target="_blank" rel="noopener" style="color:var(--go);font-weight:600;white-space:nowrap">See spot</a></div>`;
+    }).join("") + `</div>`;
+    // dots on the map
+    let dots = STATIC;
+    withLoc.forEach(t => { const [x,y] = P(t.lat,t.lng); if(x<0||x>500||y<0||y>675) return; dots += `<circle cx="${x}" cy="${y}" r="${(3+Math.min(6,t.pay/15)).toFixed(1)}" fill="#FF6A2B" fill-opacity="0.55"/>`; });
+    Object.values(PARK).forEach(p => { const [x,y] = P(p.lat,p.lon); dots += `<rect x="${x-11}" y="${y-11}" width="22" height="22" rx="5" fill="#3DDC84"/><text x="${x}" y="${y+6}" font-size="16" font-weight="900" fill="#06140C" text-anchor="middle" font-family="${C.display}">P</text>`; });
+    $("csv-map").innerHTML = `<div class="mapbox"><svg viewBox="0 0 500 675" role="img" aria-label="Your pickups on the map">${dots}</svg><div class="legend"><span><i style="background:#FF6A2B"></i>Your pickups (bigger = paid more)</span><span><i style="background:#3DDC84"></i>Today's parking spots</span></div></div>`;
+    $("csv-map").hidden = false;
+  } else $("csv-map").hidden = true;
+
+  // $/hr on trip by distance, if the file has distance and duration
+  let dist = "";
+  const dm = trips.filter(t => isFinite(t.mi) && isFinite(t.mn) && t.mn > 0);
+  if(dm.length >= 10){
+    const minutes = dm.some(t => t.mn > 400) ? 1/60 : 1; // some files store seconds
+    const B = [[0,5,"Under 5 mi"],[5,10,"5–10 mi"],[10,20,"10–20 mi"],[20,1e9,"20+ mi"]];
+    dist = `<h2 style="font-size:17px">Pay per hour on the trip, by distance</h2><div class="facts">` + B.map(([a,b,l]) => {
+      const x = dm.filter(t => t.mi >= a && t.mi < b); if(!x.length) return "";
+      const hr = x.reduce((s,t)=>s+t.pay,0) / (x.reduce((s,t)=>s+t.mn*minutes,0)/60);
+      return `<div style="display:flex;justify-content:space-between;font-size:14px;border-top:1px solid var(--line);padding-top:8px"><span>${l} · ${x.length} trips</span><b>${money(hr)}/hr</b></div>`;
+    }).join("") + `</div><p class="foot">Time on trip only. Drive-back time isn't in the file, so long trips look better here than they are.</p>`;
+  }
+  $("mine-out").innerHTML = `<h2 style="font-size:17px">When you earn the most</h2>` + grid + spots + dist + picker;
+}
 })();
 </script>
