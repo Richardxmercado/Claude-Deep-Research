@@ -90,6 +90,12 @@ h2{font:900 20px/1 var(--display);text-transform:uppercase;letter-spacing:.04em;
 
   <nav class="strip" id="strip" aria-label="Shift blocks"></nav>
 
+  <section class="card" id="msgs">
+    <h2>Pre-ride messages</h2>
+    <p class="foot" style="font-size:13px">Tap Copy, paste into the Uber chat, and change NAME. Keep it short: riders read it while walking out.</p>
+    <div id="msg-list" style="display:flex;flex-direction:column;gap:10px"></div>
+  </section>
+
   <section class="card" id="mine">
     <h2>Your trips: what actually paid</h2>
     <p class="foot" style="font-size:14px;color:var(--ink)">Load your Uber trip file and this shows which hours and pickup spots made you the most. The file stays on your phone and is never uploaded.</p>
@@ -350,6 +356,23 @@ $("back").addEventListener("click", () => { pinned = null; render(); });
 render();
 setInterval(() => { if(pinned == null) render(); else { const t = phoenixNow(); $("clock").textContent = fmtClock(t.h,t.m); } }, 30000);
 try{ navigator.wakeLock && navigator.wakeLock.request("screen").catch(()=>{}); }catch(e){}
+
+/* ----- Pre-ride messages with copy buttons ----- */
+const MSGS = [
+  {t:"Standard", m:"Hi NAME, this is Richard, your Uber Black driver in a black Chevy Suburban. Cold water and chargers are inside, and I'll take care of your bags. Any temperature or music you'd like? Just reply here. See you shortly."},
+  {t:"Hotel or airport pickup", m:"Hi NAME, this is Richard, your Uber Black driver in a black Chevy Suburban. I'll be at the main entrance and will load your bags. Cold water and chargers are inside. Let me know if you'd like a certain temperature. See you shortly."},
+  {t:"Group of 5 or more", m:"Hi NAME, this is Richard, your Uber Black driver in a black Chevy Suburban with room for everyone. For the third row, lift the lever on the captain's chair twice and it slides forward. I'll handle the bags. See you shortly."},
+];
+$("msg-list").innerHTML = MSGS.map((x,i) => `<div style="border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:6px">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><b style="font-size:14px">${x.t}</b><button class="back" data-copy="${i}" style="padding:6px 12px">Copy</button></div>
+  <p id="msg-${i}" style="margin:0;font-size:14px;color:var(--muted);user-select:all">${x.m}</p></div>`).join("");
+$("msg-list").addEventListener("click", e => {
+  const btn = e.target.closest("button[data-copy]"); if(!btn) return;
+  const i = +btn.dataset.copy, el = $("msg-" + i);
+  const done = ok => { btn.textContent = ok ? "Copied" : "Select text"; setTimeout(() => btn.textContent = "Copy", 1800); };
+  const fallback = () => { const r = document.createRange(); r.selectNodeContents(el); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); done(false); };
+  try { navigator.clipboard.writeText(MSGS[i].m).then(() => done(true), fallback); } catch(err){ fallback(); }
+});
 
 /* ----- Your trips: analyze Uber's driver_lifetime_trips.csv in the browser ----- */
 function parseCSV(text){
