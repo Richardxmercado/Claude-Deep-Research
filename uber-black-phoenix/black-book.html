@@ -1,0 +1,593 @@
+<title>Black Book PHX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#EEF0F2; --surface:#FFFFFF; --sunk:#E3E6EA; --ink:#14171C; --muted:#5B6370; --line:#D2D6DC;
+  --copper:#A9531F; --copper-soft:#F3E2D6; --on-copper:#FFFFFF;
+  --good:#1F7A4D; --good-soft:#DCEFE4; --warn:#9A6A06; --warn-soft:#F6EBCF; --bad:#B0302A; --bad-soft:#F6DCDA;
+  --h0:#E3E6EA; --h1:#F1DCCB; --h2:#E4B28E; --h3:#CE7F4C; --h4:#A9531F; --h-ink-hi:#FFFFFF;
+  --display:"Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
+  --sans:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0D0F12; --surface:#16191E; --sunk:#1E2228; --ink:#E9ECEF; --muted:#98A0AB; --line:#2A2F37;
+    --copper:#E08A52; --copper-soft:#3A2518; --on-copper:#1A0E06;
+    --good:#5BC48C; --good-soft:#15301F; --warn:#E0B24A; --warn-soft:#342A12; --bad:#F07A70; --bad-soft:#3A1916;
+    --h0:#1E2228; --h1:#3A2518; --h2:#6A3A1D; --h3:#A4582A; --h4:#E08A52; --h-ink-hi:#1A0E06;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0D0F12; --surface:#16191E; --sunk:#1E2228; --ink:#E9ECEF; --muted:#98A0AB; --line:#2A2F37;
+  --copper:#E08A52; --copper-soft:#3A2518; --on-copper:#1A0E06;
+  --good:#5BC48C; --good-soft:#15301F; --warn:#E0B24A; --warn-soft:#342A12; --bad:#F07A70; --bad-soft:#3A1916;
+  --h0:#1E2228; --h1:#3A2518; --h2:#6A3A1D; --h3:#A4582A; --h4:#E08A52; --h-ink-hi:#1A0E06;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans);padding-inline:16px;padding-block:0 48px}
+.wrap{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;padding-top:24px}
+.brand{display:flex;flex-direction:column;gap:2px}
+.brand h1{font:800 44px/0.95 var(--display);letter-spacing:.01em;margin:0;text-transform:uppercase}
+.brand h1 span{color:var(--copper)}
+.brand p{margin:0;color:var(--muted);font-size:13px}
+.season{display:flex;flex-direction:column;align-items:flex-end;gap:4px;text-align:right}
+.chip{display:inline-flex;align-items:center;gap:6px;font:500 12px/1 var(--mono);padding:6px 9px;border-radius:999px;background:var(--copper-soft);color:var(--copper);letter-spacing:.02em}
+.chip.good{background:var(--good-soft);color:var(--good)} .chip.warn{background:var(--warn-soft);color:var(--warn)} .chip.bad{background:var(--bad-soft);color:var(--bad)} .chip.plain{background:var(--sunk);color:var(--muted)}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5;scrollbar-width:none}
+nav.tabs button{font:600 14px var(--sans);color:var(--muted);background:none;border:0;border-bottom:3px solid transparent;padding:12px 12px 10px;cursor:pointer;white-space:nowrap}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--copper)}
+nav.tabs button:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--copper);outline-offset:2px}
+section.panel{display:flex;flex-direction:column;gap:20px}
+h2{font:800 28px/1 var(--display);text-transform:uppercase;letter-spacing:.02em;margin:0;text-wrap:balance}
+h3{font:600 16px/1.3 var(--sans);margin:0;text-wrap:balance}
+.lede{color:var(--muted);margin:0;max-width:68ch}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;align-items:start}
+.label{font:500 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+/* heat grid */
+.heat-scroll{overflow-x:auto}
+table.heat{border-collapse:separate;border-spacing:3px;width:100%;min-width:560px}
+table.heat th{font:500 11px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:4px;text-align:center}
+table.heat th.row{text-align:left;white-space:nowrap}
+table.heat td{height:44px;border-radius:5px;text-align:center;font:500 12px var(--mono);font-variant-numeric:tabular-nums;color:var(--ink);position:relative}
+table.heat td.l0{background:var(--h0);color:var(--muted)} table.heat td.l1{background:var(--h1)} table.heat td.l2{background:var(--h2)} table.heat td.l3{background:var(--h3);color:var(--h-ink-hi)} table.heat td.l4{background:var(--h4);color:var(--h-ink-hi)}
+table.heat td.now{outline:2px solid var(--ink);outline-offset:1px}
+.legend{display:flex;flex-wrap:wrap;gap:12px;align-items:center;font-size:12px;color:var(--muted)}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:4px}
+.seg{display:inline-flex;background:var(--sunk);border-radius:8px;padding:3px;gap:2px}
+.seg button{border:0;background:none;font:500 13px var(--sans);color:var(--muted);padding:6px 10px;border-radius:6px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+/* lists */
+ul.clean{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+ul.clean li{display:grid;grid-template-columns:110px 1fr;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+ul.clean li:first-child{border-top:0;padding-top:0}
+ul.clean .when{font:500 12px/1.4 var(--mono);color:var(--copper)}
+ul.clean p{margin:2px 0 0;color:var(--muted);font-size:14px}
+.zones{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.zone{border:1px solid var(--line);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:6px;background:var(--surface)}
+.zone p{margin:0;font-size:14px;color:var(--muted)}
+.zone .best{font:500 12px var(--mono);color:var(--copper)}
+/* forms */
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:12px;color:var(--muted);font-weight:500}
+input,select,textarea{font:500 15px var(--mono);font-variant-numeric:tabular-nums;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px 10px;width:100%;min-width:0}
+textarea{font-family:var(--sans);resize:vertical;min-height:40px}
+.btn{font:600 14px var(--sans);border:0;border-radius:8px;padding:10px 16px;cursor:pointer;background:var(--copper);color:var(--on-copper)}
+.btn.ghost{background:var(--sunk);color:var(--ink)}
+.btn.small{padding:6px 10px;font-size:12px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.verdict{border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:12px;border:1px solid var(--line);background:var(--surface)}
+.verdict .big{font:800 40px/1 var(--display);letter-spacing:.01em}
+.verdict.good{border-color:var(--good);background:var(--good-soft)} .verdict.good .big{color:var(--good)}
+.verdict.warn{border-color:var(--warn);background:var(--warn-soft)} .verdict.warn .big{color:var(--warn)}
+.verdict.bad{border-color:var(--bad);background:var(--bad-soft)} .verdict.bad .big{color:var(--bad)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}
+.stat{display:flex;flex-direction:column;gap:4px}
+.stat b{font:500 22px/1.1 var(--mono);font-variant-numeric:tabular-nums}
+.stat small{color:var(--muted);font-size:12px}
+.costbar{display:flex;height:14px;border-radius:4px;overflow:hidden;background:var(--sunk)}
+.costbar span{display:block;height:100%}
+.tbl-scroll{overflow-x:auto}
+table.log{border-collapse:collapse;width:100%;min-width:720px;font-size:14px}
+table.log th{font:500 11px var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-align:right;padding:8px;border-bottom:1px solid var(--line);white-space:nowrap}
+table.log th:first-child,table.log td:first-child,table.log th.l,table.log td.l{text-align:left}
+table.log td{padding:8px;border-bottom:1px solid var(--line);text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+table.log td.l{font-family:var(--sans);white-space:normal}
+table.log tr.example td{color:var(--muted);font-style:italic}
+.note{font-size:13px;color:var(--muted);margin:0}
+.tip{display:grid;grid-template-columns:34px 1fr;gap:12px;padding:14px 0;border-top:1px solid var(--line)}
+.tip:first-of-type{border-top:0;padding-top:0}
+.tip .k{font:800 22px/1 var(--display);color:var(--copper)}
+.tip p{margin:4px 0 0;color:var(--muted);font-size:14px;max-width:70ch}
+.status{font-size:13px;color:var(--muted)}
+.sources{font-size:12px;color:var(--muted)} .sources a{color:var(--muted)}
+a{color:var(--copper)}
+@media (max-width:520px){
+  .brand h1{font-size:36px}
+  .season{align-items:flex-start;text-align:left}
+  ul.clean li{grid-template-columns:1fr;gap:2px}
+}
+@media (prefers-reduced-motion:no-preference){ nav.tabs button{transition:color .15s,border-color .15s} }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <h1>Black Book <span>PHX</span></h1>
+      <p>An earnings toolkit for Uber Black drivers in the Valley</p>
+    </div>
+    <div class="season" id="season"></div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" id="tab-when" aria-controls="p-when" aria-selected="true">When &amp; where</button>
+    <button role="tab" id="tab-trip" aria-controls="p-trip" aria-selected="false">Trip check</button>
+    <button role="tab" id="tab-cost" aria-controls="p-cost" aria-selected="false">My cost per mile</button>
+    <button role="tab" id="tab-log" aria-controls="p-log" aria-selected="false">Shift log</button>
+    <button role="tab" id="tab-play" aria-controls="p-play" aria-selected="false">Playbook</button>
+  </nav>
+
+  <!-- WHEN & WHERE -->
+  <section class="panel" id="p-when" role="tabpanel" aria-labelledby="tab-when">
+    <div class="box">
+      <div class="row" style="justify-content:space-between">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <h2>Weekly demand map</h2>
+          <p class="lede" id="heat-lede">Black-car demand by day and time block for Phoenix. The outlined cell is right now.</p>
+        </div>
+        <div class="seg" role="group" aria-label="Map source">
+          <button id="heat-guide" aria-pressed="true">Local pattern</button>
+          <button id="heat-mine" aria-pressed="false">My $/hr</button>
+        </div>
+      </div>
+      <div class="heat-scroll"><table class="heat" id="heat"></table></div>
+      <div class="legend" id="heat-legend"></div>
+    </div>
+
+    <div class="grid2">
+      <div class="box">
+        <h3>Big dates, fall 2026 to spring 2027</h3>
+        <ul class="clean" id="events"></ul>
+        <p class="note">Dates marked "confirm" follow the usual yearly pattern and are not announced yet. Check the event site before building a week around one.</p>
+      </div>
+      <div class="box">
+        <h3>Where Black riders are</h3>
+        <div class="zones" id="zones"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRIP CHECK -->
+  <section class="panel" id="p-trip" role="tabpanel" aria-labelledby="tab-trip" hidden>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <h2>Is this ride worth it?</h2>
+      <p class="lede">Enter what the request screen shows. It counts pickup time and the empty drive back, then compares your real hourly profit to your target.</p>
+    </div>
+    <div class="grid2">
+      <div class="box">
+        <div class="fields">
+          <div class="field"><label for="t-fare">Payout shown ($)</label><input id="t-fare" type="number" inputmode="decimal" step="0.01" value="48"></div>
+          <div class="field"><label for="t-pmin">Pickup (min)</label><input id="t-pmin" type="number" inputmode="decimal" value="9"></div>
+          <div class="field"><label for="t-pmi">Pickup (mi)</label><input id="t-pmi" type="number" inputmode="decimal" step="0.1" value="4.5"></div>
+          <div class="field"><label for="t-tmin">Trip (min)</label><input id="t-tmin" type="number" inputmode="decimal" value="28"></div>
+          <div class="field"><label for="t-tmi">Trip (mi)</label><input id="t-tmi" type="number" inputmode="decimal" step="0.1" value="19"></div>
+          <div class="field"><label for="t-back">Drop-off area</label>
+            <select id="t-back">
+              <option value="0">Busy zone, next ride likely</option>
+              <option value="0.5" selected>Mixed, some drive back</option>
+              <option value="1">Far suburb, drive all the way back</option>
+            </select>
+          </div>
+          <div class="field"><label for="t-target">Target ($/hr profit)</label><input id="t-target" type="number" inputmode="decimal" value="35"></div>
+        </div>
+        <p class="note">Uses <span class="num" id="t-cpm-show">$0.00</span>/mi from the <a href="#" id="go-cost">My cost per mile</a> tab.</p>
+      </div>
+      <div class="verdict" id="t-verdict" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- COST PER MILE -->
+  <section class="panel" id="p-cost" role="tabpanel" aria-labelledby="tab-cost" hidden>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <h2>What a mile really costs you</h2>
+      <p class="lede">Black-car costs are higher than UberX: bigger vehicle, pricier insurance, more washing. Knowing your cost per mile tells you which rides lose money.</p>
+    </div>
+    <div class="grid2">
+      <div class="box">
+        <span class="label">Monthly fixed</span>
+        <div class="fields">
+          <div class="field"><label for="c-pay">Car payment / lease</label><input id="c-pay" type="number" inputmode="decimal" value="850"></div>
+          <div class="field"><label for="c-ins">Insurance</label><input id="c-ins" type="number" inputmode="decimal" value="450"></div>
+          <div class="field"><label for="c-wash">Washes &amp; detailing</label><input id="c-wash" type="number" inputmode="decimal" value="140"></div>
+          <div class="field"><label for="c-phone">Phone &amp; data</label><input id="c-phone" type="number" inputmode="decimal" value="70"></div>
+          <div class="field"><label for="c-rider">Water, chargers, mints</label><input id="c-rider" type="number" inputmode="decimal" value="60"></div>
+          <div class="field"><label for="c-other">Registration, permits, other</label><input id="c-other" type="number" inputmode="decimal" value="60"></div>
+        </div>
+        <span class="label">Per mile</span>
+        <div class="fields">
+          <div class="field"><label for="c-gas">Gas ($/gal)</label><input id="c-gas" type="number" inputmode="decimal" step="0.01" value="3.95"></div>
+          <div class="field"><label for="c-mpg">MPG (city)</label><input id="c-mpg" type="number" inputmode="decimal" value="20"></div>
+          <div class="field"><label for="c-maint">Maintenance &amp; tires ($/mi)</label><input id="c-maint" type="number" inputmode="decimal" step="0.01" value="0.10"></div>
+          <div class="field"><label for="c-dep">Extra wear, value loss ($/mi)</label><input id="c-dep" type="number" inputmode="decimal" step="0.01" value="0.15"></div>
+          <div class="field"><label for="c-miles">Miles driven / month</label><input id="c-miles" type="number" inputmode="decimal" value="4000"></div>
+        </div>
+        <p class="note">Sample numbers for a black SUV. Replace them with yours.</p>
+      </div>
+      <div class="box" aria-live="polite">
+        <span class="label">Your cost</span>
+        <div class="stats">
+          <div class="stat"><b id="c-out-cpm">$0.00</b><small>per mile, all in</small></div>
+          <div class="stat"><b id="c-out-month">$0</b><small>per month</small></div>
+          <div class="stat"><b id="c-out-day">$0</b><small>per day just to be on the road (26 days)</small></div>
+        </div>
+        <div class="costbar" id="c-bar" aria-hidden="true"></div>
+        <div class="legend" id="c-legend"></div>
+        <div id="c-irs" class="note"></div>
+        <button class="btn ghost small" id="c-save" style="align-self:flex-start">Save my costs</button>
+        <span class="status" id="c-status"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SHIFT LOG -->
+  <section class="panel" id="p-log" role="tabpanel" aria-labelledby="tab-log" hidden>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <h2>Shift log</h2>
+      <p class="lede">Log each shift from the Uber Driver app's earnings screen. After a few weeks the demand map switches to your own $/hr, and you'll see which days and zones actually pay.</p>
+    </div>
+    <div class="box">
+      <form id="log-form" class="fields" autocomplete="off">
+        <div class="field"><label for="l-date">Date</label><input id="l-date" type="date" required></div>
+        <div class="field"><label for="l-start">Start time</label><input id="l-start" type="time" value="16:00" required></div>
+        <div class="field"><label for="l-hours">Hours online</label><input id="l-hours" type="number" inputmode="decimal" step="0.25" min="0.25" required></div>
+        <div class="field"><label for="l-trips">Trips</label><input id="l-trips" type="number" inputmode="numeric" min="0"></div>
+        <div class="field"><label for="l-gross">Earnings incl. tips ($)</label><input id="l-gross" type="number" inputmode="decimal" step="0.01" min="0" required></div>
+        <div class="field"><label for="l-tips">Of that, tips ($)</label><input id="l-tips" type="number" inputmode="decimal" step="0.01" min="0"></div>
+        <div class="field"><label for="l-miles">Miles (odometer)</label><input id="l-miles" type="number" inputmode="decimal" step="0.1" min="0" required></div>
+        <div class="field"><label for="l-zone">Main zone</label>
+          <select id="l-zone"></select>
+        </div>
+        <div class="field" style="grid-column:1/-1"><label for="l-notes">Notes</label><textarea id="l-notes" rows="1" placeholder="e.g. Suns game let out 9:40, surge 1.8x at arena"></textarea></div>
+        <div class="row" style="grid-column:1/-1">
+          <button class="btn" type="submit">Add shift</button>
+          <span class="status" id="l-status"></span>
+        </div>
+      </form>
+    </div>
+    <div class="box">
+      <div class="row" style="justify-content:space-between">
+        <h3 id="sum-title">Last 30 days</h3>
+        <span class="chip plain" id="store-chip">Saving…</span>
+      </div>
+      <div class="stats" id="sum-stats"></div>
+      <div id="zone-rank"></div>
+    </div>
+    <div class="box">
+      <div class="tbl-scroll"><table class="log" id="log-table"></table></div>
+    </div>
+  </section>
+
+  <!-- PLAYBOOK -->
+  <section class="panel" id="p-play" role="tabpanel" aria-labelledby="tab-play" hidden>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <h2>Playbook</h2>
+      <p class="lede">What moves the number for a Black driver here. They're ordered by how much money each one usually adds.</p>
+    </div>
+    <div class="box" id="tips"></div>
+    <p class="sources">Background: <a href="https://www.irs.gov/newsroom/irs-sets-2026-business-standard-mileage-rate-at-725-cents-per-mile-up-25-cents" target="_blank" rel="noopener">IRS 2026 mileage rate</a> ·
+      <a href="https://www.journalofaccountancy.com/news/2026/jul/irs-raises-standard-mileage-rates-for-remainder-of-2026/" target="_blank" rel="noopener">July 2026 rate increase</a> ·
+      <a href="https://www.skyharbor.com/ground-transportation/ride-share/" target="_blank" rel="noopener">PHX rideshare rules</a> ·
+      <a href="https://www.phoenix.gov/major-events.html" target="_blank" rel="noopener">City of Phoenix major events</a> ·
+      <a href="https://www.phoenixnewtimes.com/arts-culture/the-biggest-events-coming-to-phoenix-in-2026-40634916/" target="_blank" rel="noopener">Phoenix New Times 2026 events</a> ·
+      <a href="https://www.uber.com/global/en/r/cities/car-service/phoenix-az-us/" target="_blank" rel="noopener">Uber Black Phoenix</a></p>
+  </section>
+</div>
+
+<script>
+(function(){
+const $ = id => document.getElementById(id);
+const money = (n, d=2) => (n<0?"-$":"$") + Math.abs(n).toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
+const num = v => { const n = parseFloat(v); return isFinite(n) ? n : 0; };
+const store = { get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} } };
+
+/* ---------- Phoenix reference data ---------- */
+const DAYS = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const BLOCKS = [
+  {k:"early", label:"4–8a",  from:4,  to:8},
+  {k:"day",   label:"8a–12p",from:8,  to:12},
+  {k:"mid",   label:"12–4p", from:12, to:16},
+  {k:"eve",   label:"4–8p",  from:16, to:20},
+  {k:"night", label:"8p–12a",from:20, to:24},
+  {k:"late",  label:"12–4a", from:0,  to:4},
+];
+// 0–4 black-car demand, peak season (Jan–Apr). Rule of thumb for PHX: airport business travel
+// Mon am / Thu–Fri pm, Scottsdale nightlife Fri–Sat late, resort & conference weekdays.
+const GUIDE = {
+  Mon:[4,3,2,3,2,0], Tue:[3,2,2,3,2,0], Wed:[3,2,2,3,2,1], Thu:[3,2,3,4,3,2],
+  Fri:[3,2,3,4,4,4], Sat:[2,2,2,3,4,4], Sun:[2,2,3,4,2,1]
+};
+const SEASONS = [
+  {months:[0,1,2,3], name:"Peak season", tone:"good", text:"Snowbirds, spring training, golf, conferences. Drive every hour you can."},
+  {months:[4],       name:"Shoulder", tone:"warn", text:"Conferences taper off after graduations. Weekdays and airport still solid."},
+  {months:[5,6,7,8], name:"Summer slowdown", tone:"bad", text:"Tourism drops. Focus on PHX mornings, business travel and Diamondbacks nights; cut dead hours."},
+  {months:[9,10],    name:"Ramping up", tone:"warn", text:"Snowbirds and conference season return. Cardinals, Suns and State Fair weekends."},
+  {months:[11],      name:"Holiday + bowl season", tone:"good", text:"Holiday parties, airport rush around Dec 20–Jan 3, Fiesta Bowl."},
+];
+const SEASON_MULT = {good:1, warn:0.85, bad:0.65};
+
+const EVENTS = [
+  {when:"Oct 1 – Nov 1, 2026", title:"Arizona State Fair", note:"Thu–Sun at the fairgrounds (19th Ave &amp; McDowell). Mostly UberX riders; go for the 9–11pm exits only if there's surge.", confirm:false},
+  {when:"Sundays, Sep – Jan", title:"Cardinals home games, Glendale", note:"State Farm Stadium. Pre-game from Scottsdale and Biltmore hotels; post-game is heavy traffic, so wait for surge before driving in.", confirm:false},
+  {when:"Late Oct – Apr", title:"Suns season, downtown arena", note:"Pickups peak 15–30 min after the final buzzer. Stage a few blocks away from the arena on Jefferson or Washington.", confirm:true},
+  {when:"Nov 2026", title:"Ironman Arizona, Tempe", note:"Tempe Town Lake. Road closures all day; athletes and families need airport runs Sunday and Monday.", confirm:true},
+  {when:"Dec 20 – Jan 3", title:"Holiday airport rush", note:"Longest trips of the year out of PHX. Watch the queue length in the app before you join it.", confirm:false},
+  {when:"~Dec 31 / Jan 1", title:"Fiesta Bowl + New Year's Eve", note:"Glendale bowl game, then Old Town Scottsdale NYE. Surge peaks 12:15–2:30am.", confirm:true},
+  {when:"Mid-Jan 2027", title:"Barrett-Jackson car auction, Scottsdale", note:"WestWorld, about a week long. High-income crowd from resorts: good Black trips.", confirm:true},
+  {when:"Early Feb 2027", title:"WM Phoenix Open, TPC Scottsdale", note:"Biggest Black-car week of the year. Thu–Sat. Resorts to course and Old Town afterward.", confirm:true},
+  {when:"Feb 2027", title:"NBA All-Star Weekend, Phoenix", note:"Announced for Phoenix in 2027. Expect corporate and VIP demand downtown all weekend.", confirm:true},
+  {when:"Late Feb – Mar 2027", title:"Cactus League spring training", note:"15 teams across the Valley. Scottsdale Stadium, Salt River Fields and Camelback Ranch mean daytime resort runs.", confirm:true},
+  {when:"Mar 2027", title:"NASCAR spring race, Phoenix Raceway", note:"Avondale is far west. Take the trip there, then reposition to Scottsdale rather than waiting.", confirm:true},
+];
+
+const ZONES = [
+  {id:"phx", name:"Sky Harbor (PHX)", best:"Mon 5–9a · Thu–Fri 3–8p", note:"Business travelers who book Black out of habit. Check the queue in the app before you commit."},
+  {id:"oldtown", name:"Old Town Scottsdale", best:"Fri–Sat 9p–2:30a", note:"Bar close is 2am. Bachelorette groups want SUVs; stage off Scottsdale Rd, not in the gridlock."},
+  {id:"resorts", name:"Scottsdale & Paradise Valley resorts", best:"Weekdays 6–9a · 4–7p", note:"Fairmont Princess, the Phoenician, Sanctuary, Mountain Shadows. Conference travelers heading to PHX."},
+  {id:"biltmore", name:"Biltmore / Camelback corridor", best:"Weekdays 7–9a · 4–8p", note:"Offices, Arizona Biltmore, upscale dining. Steady mid-length trips."},
+  {id:"downtown", name:"Downtown Phoenix", best:"Game &amp; convention days", note:"Convention Center, arena, Chase Field. Check the convention calendar every week."},
+  {id:"northscottsdale", name:"Kierland / Desert Ridge", best:"Weekday evenings", note:"JW Desert Ridge and Westin Kierland host large groups. Long trips to PHX."},
+  {id:"tempe", name:"Tempe / ASU", best:"Event nights only", note:"Mostly UberX demand. Good for Black only around big ASU games and concerts."},
+  {id:"west", name:"West Valley (Glendale)", best:"Stadium events", note:"Take trips in for events, then drive back east. Riders rarely want Black out here otherwise."},
+  {id:"other", name:"Other", best:"", note:""},
+];
+
+/* ---------- season header ---------- */
+const now = new Date();
+const season = SEASONS.find(s => s.months.includes(now.getMonth()));
+$("season").innerHTML = `<span class="chip ${season.tone}">${season.name}</span><span class="note" style="max-width:40ch">${season.text}</span>`;
+
+/* ---------- tabs ---------- */
+const tabs = [...document.querySelectorAll('nav.tabs button')];
+function showTab(id){
+  tabs.forEach(t => { const on = t.id === id; t.setAttribute("aria-selected", on); $(t.getAttribute("aria-controls")).hidden = !on; });
+  store.set("bb.tab", id);
+}
+tabs.forEach(t => t.addEventListener("click", () => showTab(t.id)));
+$("go-cost").addEventListener("click", e => { e.preventDefault(); showTab("tab-cost"); });
+const hashMap = {when:"tab-when",trip:"tab-trip",cost:"tab-cost",log:"tab-log",playbook:"tab-play"};
+showTab(hashMap[location.hash.slice(1)] || store.get("bb.tab") || "tab-when");
+
+/* ---------- events & zones ---------- */
+$("events").innerHTML = EVENTS.map(e => `<li><span class="when">${e.when}${e.confirm?'<br><span class="chip plain" style="margin-top:4px">confirm</span>':''}</span><div><h3>${e.title}</h3><p>${e.note}</p></div></li>`).join("");
+$("zones").innerHTML = ZONES.filter(z=>z.id!=="other").map(z => `<div class="zone"><h3>${z.name}</h3><span class="best">${z.best}</span><p>${z.note}</p></div>`).join("");
+$("l-zone").innerHTML = ZONES.map(z => `<option value="${z.id}">${z.name}</option>`).join("");
+
+/* ---------- costs ---------- */
+const COST_IDS = ["c-pay","c-ins","c-wash","c-phone","c-rider","c-other","c-gas","c-mpg","c-maint","c-dep","c-miles"];
+let costs = {};
+function readCosts(){ COST_IDS.forEach(id => costs[id] = num($(id).value)); }
+function applyCosts(obj){ if(!obj) return; COST_IDS.forEach(id => { if(obj[id] != null) $(id).value = obj[id]; }); }
+function costModel(){
+  readCosts();
+  const miles = Math.max(costs["c-miles"], 1);
+  const fixed = costs["c-pay"]+costs["c-ins"]+costs["c-wash"]+costs["c-phone"]+costs["c-rider"]+costs["c-other"];
+  const fuel = costs["c-mpg"] > 0 ? costs["c-gas"]/costs["c-mpg"] : 0;
+  const parts = [
+    {name:"Car payment", v:costs["c-pay"]/miles, c:"var(--h4)"},
+    {name:"Insurance", v:costs["c-ins"]/miles, c:"var(--h3)"},
+    {name:"Other fixed", v:(fixed-costs["c-pay"]-costs["c-ins"])/miles, c:"var(--h2)"},
+    {name:"Fuel", v:fuel, c:"var(--warn)"},
+    {name:"Maintenance &amp; wear", v:costs["c-maint"]+costs["c-dep"], c:"var(--muted)"},
+  ];
+  const cpm = parts.reduce((a,p)=>a+p.v,0);
+  return {cpm, fixed, miles, parts, variable: fuel+costs["c-maint"]+costs["c-dep"]};
+}
+function irsRate(d){ return d >= new Date(2026,6,1) && d < new Date(2027,0,1) ? 0.76 : 0.725; }
+function renderCosts(){
+  const m = costModel();
+  $("c-out-cpm").textContent = money(m.cpm);
+  $("c-out-month").textContent = money(m.cpm*m.miles,0);
+  $("c-out-day").textContent = money(m.fixed/26,0);
+  $("c-bar").innerHTML = m.parts.map(p => `<span style="width:${(p.v/m.cpm*100)||0}%;background:${p.c}"></span>`).join("");
+  $("c-legend").innerHTML = m.parts.map(p => `<span><i style="background:${p.c}"></i>${p.name} <span class="num">${money(p.v)}</span></span>`).join("");
+  const r = irsRate(now);
+  $("c-irs").innerHTML = `IRS standard mileage rate right now: <b class="num">${(r*100).toFixed(1)}¢</b>/mi (72.5¢ Jan–Jun 2026, 76¢ from Jul 1, 2026). ` +
+    (r > m.cpm ? `That is more than your real cost, so the standard mileage deduction likely beats actual expenses. Log every mile.` : `Your real cost is higher than the IRS rate. Ask your tax preparer about the actual-expense method.`);
+  $("t-cpm-show").textContent = money(m.cpm);
+  renderTrip(); renderLog();
+}
+COST_IDS.forEach(id => $(id).addEventListener("input", () => { renderCosts(); store.set("bb.costs", Object.assign({}, costs)); }));
+
+/* ---------- trip check ---------- */
+const TRIP_IDS = ["t-fare","t-pmin","t-pmi","t-tmin","t-tmi","t-back","t-target"];
+function renderTrip(){
+  const v = {}; TRIP_IDS.forEach(id => v[id] = num($(id).value));
+  const cpm = costModel().cpm;
+  const backMi = v["t-tmi"]*v["t-back"], backMin = v["t-tmin"]*v["t-back"]*0.8;
+  const miles = v["t-pmi"] + v["t-tmi"] + backMi;
+  const mins = v["t-pmin"] + v["t-tmin"] + backMin;
+  // only per-mile running costs; fixed costs are already sunk for the shift
+  const runCost = miles * costModel().variable;
+  const fullCost = miles * cpm;
+  const profit = v["t-fare"] - runCost;
+  const hr = mins > 0 ? profit / mins * 60 : 0;
+  const hrFull = mins > 0 ? (v["t-fare"]-fullCost) / mins * 60 : 0;
+  const perMile = miles > 0 ? v["t-fare"]/miles : 0;
+  const target = v["t-target"];
+  const tone = hr >= target ? "good" : hr >= target*0.75 ? "warn" : "bad";
+  const word = {good:"Take it", warn:"Borderline", bad:"Pass"}[tone];
+  const why = {
+    good:`Beats your ${money(target,0)}/hr target.`,
+    warn:`Below target. Take it if it's slow or it drops you somewhere busy.`,
+    bad:`Well under target. Passing costs less than driving this one, unless the next request is far off.`
+  }[tone];
+  $("t-verdict").className = "verdict " + tone;
+  $("t-verdict").innerHTML = `<span class="label">Verdict</span><span class="big">${word}</span><p style="margin:0">${why}</p>
+    <div class="stats">
+      <div class="stat"><b>${money(hr,0)}</b><small>per hour, after gas &amp; wear</small></div>
+      <div class="stat"><b>${money(hrFull,0)}</b><small>per hour, after all costs</small></div>
+      <div class="stat"><b>${money(perMile)}</b><small>payout per mile driven</small></div>
+      <div class="stat"><b>${Math.round(mins)} min</b><small>${miles.toFixed(1)} mi incl. pickup &amp; return</small></div>
+    </div>`;
+  store.set("bb.trip", v);
+}
+TRIP_IDS.forEach(id => $(id).addEventListener("input", renderTrip));
+
+/* ---------- shift log ---------- */
+let shifts = []; let db = null; let storeMode = "local";
+const EXAMPLES = [
+  {date:"2026-09-18", start:"05:00", hours:5, trips:6, gross:338, tips:52, miles:142, zone:"phx", notes:"Example row"},
+  {date:"2026-09-19", start:"20:00", hours:6, trips:9, gross:412, tips:96, miles:118, zone:"oldtown", notes:"Example row"},
+  {date:"2026-09-21", start:"11:00", hours:7, trips:5, gross:296, tips:38, miles:176, zone:"west", notes:"Example row"},
+];
+function blockOf(start){ const h = parseInt((start||"0").split(":")[0],10); return BLOCKS.findIndex(b => h>=b.from && h<b.to); }
+function dayOf(date){ const d = new Date(date+"T12:00:00"); return (d.getDay()+6)%7; }
+function metrics(s){
+  const m = costModel();
+  const net = s.gross - s.miles*m.cpm;
+  return {net, hr: s.hours>0 ? s.gross/s.hours : 0, nethr: s.hours>0 ? net/s.hours : 0, permi: s.miles>0 ? s.gross/s.miles : 0};
+}
+function renderLog(){
+  const real = shifts.length > 0;
+  const rows = real ? shifts.slice().sort((a,b)=> (b.date+b.start).localeCompare(a.date+a.start)) : EXAMPLES;
+  const zname = id => (ZONES.find(z=>z.id===id)||{}).name || id;
+  $("log-table").innerHTML = `<thead><tr><th>Date</th><th>Start</th><th>Hrs</th><th>Trips</th><th>Earned</th><th>Tips</th><th>Miles</th><th>$/hr</th><th>Net $/hr</th><th class="l">Zone</th><th class="l">Notes</th>${real?"<th></th>":""}</tr></thead><tbody>` +
+    rows.map(s => { const x = metrics(s); return `<tr class="${real?"":"example"}"><td>${s.date}</td><td>${s.start}</td><td>${s.hours}</td><td>${s.trips??""}</td><td>${money(s.gross)}</td><td>${s.tips?money(s.tips):""}</td><td>${s.miles}</td><td>${money(x.hr,0)}</td><td>${money(x.nethr,0)}</td><td class="l">${zname(s.zone)}</td><td class="l">${escapeHtml(s.notes||"")}</td>${real?`<td><button class="btn ghost small" data-del="${s.id}" aria-label="Delete shift ${s.date}">Delete</button></td>`:""}</tr>`; }).join("") + `</tbody>`;
+
+  // summary: last 30 days (or examples)
+  const cutoff = new Date(now); cutoff.setDate(cutoff.getDate()-30);
+  const recent = real ? shifts.filter(s => new Date(s.date+"T12:00:00") >= cutoff) : EXAMPLES;
+  const sum = k => recent.reduce((a,s)=>a+(num(s[k])),0);
+  const H = sum("hours"), G = sum("gross"), M = sum("miles"), T = sum("tips");
+  const cpm = costModel().cpm;
+  const ytd = real ? shifts.filter(s => s.date.startsWith(String(now.getFullYear()))) : [];
+  const deduction = ytd.reduce((a,s)=> a + num(s.miles)*irsRate(new Date(s.date+"T12:00:00")), 0);
+  $("sum-title").textContent = real ? "Last 30 days" : "Last 30 days · example numbers until you log a shift";
+  $("sum-stats").innerHTML = [
+    [money(G,0),"earned"], [H?money(G/H):"—","per hour, gross"], [H?money((G-M*cpm)/H):"—","per hour, after costs"],
+    [M?money(G/M):"—","per mile"], [G?Math.round(T/G*100)+"%":"—","of earnings from tips"],
+    [real?money(deduction,0):"—", `mileage deduction ${now.getFullYear()} so far`]
+  ].map(([b,s]) => `<div class="stat"><b>${b}</b><small>${s}</small></div>`).join("");
+
+  // zone ranking
+  const byZone = {};
+  recent.forEach(s => { const z = byZone[s.zone] ||= {h:0,g:0,m:0}; z.h+=num(s.hours); z.g+=num(s.gross); z.m+=num(s.miles); });
+  const ranked = Object.entries(byZone).filter(([,z])=>z.h>0).map(([id,z])=>({id, hr:(z.g-z.m*cpm)/z.h, h:z.h})).sort((a,b)=>b.hr-a.hr);
+  $("zone-rank").innerHTML = ranked.length ? `<span class="label">Net $/hr by zone</span><div class="stats" style="margin-top:8px">` + ranked.map(z=>`<div class="stat"><b>${money(z.hr,0)}</b><small>${zname(z.id)} · ${z.h} hrs</small></div>`).join("") + `</div>` : "";
+
+  renderHeat();
+}
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+
+$("log-table").addEventListener("click", async e => {
+  const id = e.target.getAttribute("data-del"); if(!id) return;
+  const btn = e.target;
+  if(btn.dataset.confirm !== "1"){ btn.dataset.confirm = "1"; btn.textContent = "Confirm"; setTimeout(()=>{ btn.dataset.confirm=""; btn.textContent="Delete"; }, 3000); return; }
+  if(db){ try{ await db.collection("shifts").doc(id).delete(); }catch(err){ $("l-status").textContent = "Couldn't delete. Try again."; } }
+  else { shifts = shifts.filter(s=>s.id!==id); store.set("bb.shifts", shifts); renderLog(); }
+});
+
+$("l-date").value = now.toISOString().slice(0,10);
+$("log-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const s = {
+    date:$("l-date").value, start:$("l-start").value, hours:num($("l-hours").value), trips:num($("l-trips").value),
+    gross:num($("l-gross").value), tips:num($("l-tips").value), miles:num($("l-miles").value),
+    zone:$("l-zone").value, notes:$("l-notes").value.trim().slice(0,300), createdAt:new Date().toISOString()
+  };
+  if(!s.date || s.hours<=0){ $("l-status").textContent = "Add a date and hours online."; return; }
+  if(db){
+    try{ await db.collection("shifts").add(s); $("l-status").textContent = "Shift saved."; }
+    catch(err){ $("l-status").textContent = err && err.code==="quota_exceeded" ? "Log is full. Delete old shifts to add more." : "Couldn't save. Check your connection and try again."; return; }
+  } else {
+    s.id = "s"+Date.now(); shifts.push(s); store.set("bb.shifts", shifts); renderLog();
+    $("l-status").textContent = "Shift saved on this device.";
+  }
+  ["l-hours","l-trips","l-gross","l-tips","l-miles","l-notes"].forEach(id => $(id).value = "");
+});
+
+/* ---------- heat map ---------- */
+let heatMode = "guide";
+function renderHeat(){
+  const nowDay = (now.getDay()+6)%7, nowBlock = blockOf(String(now.getHours()));
+  const mult = SEASON_MULT[season.tone];
+  let cell;
+  if(heatMode === "mine"){
+    const agg = {}; const cpm = costModel().cpm;
+    shifts.forEach(s => { const k = dayOf(s.date)+"-"+blockOf(s.start); const a = agg[k] ||= {h:0,n:0}; a.h+=num(s.hours); a.n+= num(s.gross)-num(s.miles)*cpm; });
+    const vals = Object.values(agg).map(a=>a.n/a.h);
+    const max = Math.max(...vals, 1);
+    cell = (d,b) => { const a = agg[d+"-"+b]; if(!a) return {l:0, t:"·"}; const v = a.n/a.h; return {l: Math.max(1, Math.ceil(v/max*4)), t: money(v,0)}; };
+    $("heat-lede").textContent = shifts.length ? "Your net $/hr by the block each shift started in. Empty cells have no shifts yet." : "Log shifts to fill this in with your own net $/hr.";
+    $("heat-legend").innerHTML = `<span>Darker = more profit per hour for you</span>`;
+  } else {
+    cell = (d,b) => { const raw = GUIDE[DAYS[d]][b]; const l = Math.round(raw*mult); return {l, t:["Dead","Low","OK","Good","Peak"][l]}; };
+    $("heat-lede").textContent = `Black-car demand by day and time block in Phoenix, adjusted for ${season.name.toLowerCase()}. The outlined cell is right now.`;
+    $("heat-legend").innerHTML = ["Dead","Low","OK","Good","Peak"].map((n,i)=>`<span><i style="background:var(--h${i})"></i>${n}</span>`).join("") + `<span>Event nights beat this map. Check the dates below.</span>`;
+  }
+  $("heat").innerHTML = `<thead><tr><th></th>${DAYS.map(d=>`<th>${d}</th>`).join("")}</tr></thead><tbody>` +
+    BLOCKS.map((b,bi)=>`<tr><th class="row">${b.label}</th>${DAYS.map((_,di)=>{ const c = cell(di,bi); return `<td class="l${c.l}${di===nowDay&&bi===nowBlock?" now":""}" title="${DAYS[di]} ${b.label}">${c.t}</td>`; }).join("")}</tr>`).join("") + `</tbody>`;
+}
+$("heat-guide").addEventListener("click", ()=>{ heatMode="guide"; $("heat-guide").setAttribute("aria-pressed","true"); $("heat-mine").setAttribute("aria-pressed","false"); renderHeat(); });
+$("heat-mine").addEventListener("click", ()=>{ heatMode="mine"; $("heat-mine").setAttribute("aria-pressed","true"); $("heat-guide").setAttribute("aria-pressed","false"); renderHeat(); });
+
+/* ---------- playbook ---------- */
+const TIPS = [
+  ["Stop taking rides that lose money", "Run questionable requests through Trip check. Long pickups and one-way trips to Buckeye, Queen Creek or Maricopa often net under $20/hr after the drive back. Declining them costs you nothing on Black if your acceptance rate stays within the app's limits."],
+  ["Work the business-travel windows at PHX", "Monday 5–9am departures and Thursday–Friday 3–8pm arrivals are when expense-account riders book Black. Before you join the airport queue, compare its length to what's surging in Scottsdale."],
+  ["Plan weeks around the event list", "One Phoenix Open or All-Star weekend can equal two ordinary weeks. Block your calendar early, get the car detailed the day before, and be positioned before the event ends."],
+  ["Say yes to Black Hourly and Reserve", "Hourly bookings and scheduled rides are guaranteed time with no deadhead. Resort and corporate riders use them for golf days and multi-stop meetings."],
+  ["Win on the 5-star details that bring tips", "In Phoenix that means a cold car. Pre-cool before every pickup from May to October, keep chilled water in a cooler, and have phone chargers for both cable types. Tips are often 15–25% of Black earnings, so they add up."],
+  ["Cut dead miles, not hours", "Park and wait near the next zone instead of circling. Every empty mile costs you your all-in cost per mile. Use the heat map to see where to wait."],
+  ["Use the summer to fix the car and your numbers", "June through September is slow. Schedule maintenance, tires and detailing then, and drive only the PHX morning and weekend-night blocks that still pay."],
+  ["Track every mile for taxes", "Log odometer miles every shift. At 76¢/mi for the second half of 2026, 1,000 miles is a $760 deduction. Set aside about 25–30% of your net for self-employment and income tax, and confirm the number with a tax preparer."],
+  ["Build your own client list the right way", "Some Black drivers add private clients over time. Do it separately from Uber: your own livery permits and commercial insurance, your own marketing. Don't solicit riders you met through the app, since that violates Uber's rules and can get you deactivated."],
+];
+$("tips").innerHTML = TIPS.map((t,i)=>`<div class="tip"><span class="k">${i+1}</span><div><h3>${t[0]}</h3><p>${t[1]}</p></div></div>`).join("");
+
+/* ---------- restore local state & boot ---------- */
+applyCosts(store.get("bb.costs"));
+const tripSaved = store.get("bb.trip"); if(tripSaved) TRIP_IDS.forEach(id => { if(tripSaved[id]!=null) $(id).value = tripSaved[id]; });
+shifts = store.get("bb.shifts") || [];
+$("store-chip").textContent = "Saved on this device";
+renderCosts();
+
+/* ---------- db: shift log & costs follow the account ---------- */
+(async () => {
+  try{
+    if(!window.claude || !window.claude.use) return;
+    const d = await window.claude.use("db");
+    if(!d) return;
+    db = d; storeMode = "db";
+    $("store-chip").textContent = "Synced to your account";
+    const local = shifts.slice();
+    db.collection("shifts").orderBy("date","desc").limit(1000).onSnapshot(snap => {
+      shifts = snap.docs.map(doc => Object.assign({id:doc.id}, doc.data()));
+      renderLog();
+    }, () => { $("store-chip").textContent = "Sync paused"; });
+    const cs = await db.doc("settings/costs").get();
+    if(cs.exists){ applyCosts(cs.data()); renderCosts(); }
+    // move any shifts saved on this device before sync was available
+    for(const s of local){ const {id, ...body} = s; try{ await db.collection("shifts").doc(id).set(body); }catch(e){} }
+    if(local.length) store.set("bb.shifts", []);
+  }catch(e){ /* stay on device storage */ }
+})();
+
+$("c-save").addEventListener("click", async () => {
+  readCosts(); store.set("bb.costs", Object.assign({}, costs));
+  if(db){
+    try{ await db.doc("settings/costs").set(Object.assign({}, costs, {costPerMile: +costModel().cpm.toFixed(3), updatedAt:new Date().toISOString()})); $("c-status").textContent = "Saved to your account."; }
+    catch(e){ $("c-status").textContent = "Saved on this device. Account sync failed."; }
+  } else $("c-status").textContent = "Saved on this device.";
+});
+})();
+</script>
