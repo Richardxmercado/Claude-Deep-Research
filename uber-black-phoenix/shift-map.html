@@ -92,7 +92,7 @@ h2{font:900 20px/1 var(--display);text-transform:uppercase;letter-spacing:.04em;
 
   <section class="card" id="msgs">
     <h2>Pre-ride messages</h2>
-    <p class="foot" style="font-size:13px">Tap Copy, paste into the Uber chat, and change NAME. Keep it short: riders read it while walking out.</p>
+    <p class="foot" style="font-size:13px">Tap Copy, paste into the Uber chat, and change NAME. The card line lets quiet or 4am riders take your card without a conversation. It's a written mention on Uber's platform, so it carries some account risk. The last version doesn't mention a card.</p>
     <div id="msg-list" style="display:flex;flex-direction:column;gap:10px"></div>
   </section>
 
@@ -359,9 +359,10 @@ try{ navigator.wakeLock && navigator.wakeLock.request("screen").catch(()=>{}); }
 
 /* ----- Pre-ride messages with copy buttons ----- */
 const MSGS = [
-  {t:"Standard", m:"Hi NAME, this is Richard, your Uber Black driver in a black Chevy Suburban. Cold water and chargers are inside, and I'll take care of your bags. Any temperature or music you'd like? Just reply here. See you shortly."},
-  {t:"Hotel or airport pickup", m:"Hi NAME, this is Richard, your Uber Black driver in a black Chevy Suburban. I'll be at the main entrance and will load your bags. Cold water and chargers are inside. Let me know if you'd like a certain temperature. See you shortly."},
-  {t:"Group of 5 or more", m:"Hi NAME, this is Richard, your Uber Black driver in a black Chevy Suburban with room for everyone. For the third row, lift the lever on the captain's chair twice and it slides forward. I'll handle the bags. See you shortly."},
+  {t:"Standard", m:"Hi NAME, this is Richard, your Uber Black driver in a black Chevy Suburban. Cold water and chargers are inside, and I'll take care of your bags. Any temperature or music you'd like? Just reply here. If you enjoy the ride and want the same driver next time, my card is in the seat pocket. See you shortly."},
+  {t:"Hotel or airport pickup", m:"Hi NAME, this is Richard, your Uber Black driver in a black Chevy Suburban. I'll be at the main entrance and will load your bags. Cold water and chargers are inside. If you enjoy the ride and want the same driver for future airport trips, my card is in the seat pocket. See you shortly."},
+  {t:"Group of 5 or more", m:"Hi NAME, this is Richard, your Uber Black driver in a black Chevy Suburban with room for everyone. For the third row, lift the lever on the captain's chair twice and it slides forward. I'll handle the bags. If you enjoy the ride, my card is in the seat pocket. See you shortly."},
+  {t:"Lower-risk version (no card mention)", m:"Hi NAME, this is Richard, your Uber Black driver in a black Chevy Suburban. Cold water and chargers are inside, and I'll take care of your bags. Any temperature or music you'd like? Just reply here. If you enjoy the ride and want me as your driver again, just ask before you step out. See you shortly."},
 ];
 $("msg-list").innerHTML = MSGS.map((x,i) => `<div style="border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:6px">
   <div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><b style="font-size:14px">${x.t}</b><button class="back" data-copy="${i}" style="padding:6px 12px">Copy</button></div>
