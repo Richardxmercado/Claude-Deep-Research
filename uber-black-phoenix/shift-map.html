@@ -84,7 +84,7 @@ h2{font:900 20px/1 var(--display);text-transform:uppercase;letter-spacing:.04em;
       <span><i style="background:#3DDC84"></i>Park here</span>
       <span><i style="background:#FF6A2B"></i>Hotels in play now</span>
       <span><i style="background:#4A5361"></i>Other hotels</span>
-      <span>Drawn to scale from real coordinates. Tap Navigate for exact directions.</span>
+      <span>Positions are approximate. Tap Navigate for exact directions.</span>
     </div>
   </div>
 
@@ -94,7 +94,7 @@ h2{font:900 20px/1 var(--display);text-transform:uppercase;letter-spacing:.04em;
     <h2>Your trips: what actually paid</h2>
     <p class="foot" style="font-size:14px;color:var(--ink)">Load your Uber trip file and this shows which hours and pickup spots made you the most. The file stays on your phone and is never uploaded.</p>
     <ol class="src" style="font-size:13px;color:var(--ink)">
-      <li>On a browser, go to <b>drivers.uber.com</b> or Uber's "Download your data" page and request your data. Uber emails a zip when it's ready.</li>
+      <li>On a browser, go to <b>drivers.uber.com</b> or Uber's "Download your data" page and request your data. When it's ready, Uber gives you a download, usually a zip file.</li>
       <li>Unzip it (the Files app does this on iPhone) and pick <b>driver_lifetime_trips.csv</b> below.</li>
     </ol>
     <label class="back" style="display:inline-block;cursor:pointer" for="csv">Load trip file (.csv)</label>
@@ -115,8 +115,9 @@ h2{font:900 20px/1 var(--display);text-transform:uppercase;letter-spacing:.04em;
     <h2>How Uber picks who gets the ping</h2>
     <ul class="facts">
       <li class="v"><span class="t">✓</span><span>Uber waits a few seconds, groups nearby requests and drivers, then matches to cut total <b>pickup time (ETA)</b>. It's based on drive time, not straight-line distance.<sup><a href="#s1">1</a></sup></span></li>
-      <li class="i"><span class="t">≈</span><span>So park where you can get onto the main road fast. Pick a spot near the garage exit on the lowest covered level. Deep inside a garage or behind a light, you're slower than a driver at the curb.</span></li>
-      <li class="i"><span class="t">≈</span><span>Stay online while you reposition. A pickup behind you costs ETA, one ahead of you doesn't, so drive toward the hotels.</span></li>
+      <li class="i"><span class="t">≈</span><span>So park where you can get onto the main road fast: near the garage exit, not deep inside.</span></li>
+      <li class="i"><span class="t">≈</span><span>Stay online while you move between spots. You can get matched on the way.</span></li>
+      <li class="v"><span class="t">✓</span><span>Uber needs your GPS to know where you are, and signal drops in tunnels and heavy cover.<sup><a href="#s17">17</a></sup> Underground or deep inside a garage, check that the app still shows your dot in the right place.</span></li>
     </ul>
   </section>
 
@@ -124,44 +125,43 @@ h2{font:900 20px/1 var(--display);text-transform:uppercase;letter-spacing:.04em;
     <h2>10-second rule</h2>
     <div class="rule-big">Payout $ ≥ total minutes</div>
     <ul class="facts">
-      <li class="i"><span class="t">≈</span><span>Pickup minutes + trip minutes. 8 + 30 = 38, so it needs $38+. That works out to at least $60/hr for every minute you're on a trip. This is arithmetic, not market data.</span></li>
-      <li class="i"><span class="t">≈</span><span>Pickup over 12 minutes: only if it pays $60+.</span></li>
-      <li class="v"><span class="t">✓</span><span>Apps like GigU, Para and Maxymo grade offers automatically, but Uber says automation tools that access its app aren't allowed, and Lyft has warned drivers using them of deactivation.<sup><a href="#s15">15</a></sup> Not worth risking a Black account. This rule does the same job in your head.</span></li>
+      <li class="i"><span class="t">≈</span><span>Pickup minutes + trip minutes. 8 + 30 = 38, so it needs $38+. That's at least $1 a minute, or $60/hr, from accepting to drop-off. It doesn't count the drive back, so take ride endings into account. This is arithmetic, not market data.</span></li>
+      <li class="v"><span class="t">✓</span><span>Apps like GigU, Para and Maxymo grade offers automatically, but Uber says automation tools that access its app aren't allowed, and Lyft has warned drivers using them of deactivation.<sup><a href="#s15">15</a></sup> Not worth risking a Black account. The rule above does the same job in your head.</span></li>
     </ul>
   </section>
 
   <section class="card">
     <h2>Gas and heat</h2>
     <ul class="facts">
-      <li class="v"><span class="t">✓</span><span>Suburban 5.3L: EPA 14–15 mpg city.<sup><a href="#s6">6</a></sup> At $4.95 that's <b>33–35¢ every mile</b>. 10 empty miles ≈ $3.40.</span></li>
-      <li class="v"><span class="t">✓</span><span>Phoenix-area average regular was <b>$4.70</b> on Sept 18.<sup><a href="#s7">7</a></sup> You're paying $4.89–5.00, which is 20–30¢ over, or $5–7.50 per 25 gallons.</span></li>
+      <li class="v"><span class="t">✓</span><span>Suburban with the 5.3L V8 (the usual engine; check yours): EPA 14–15 mpg city.<sup><a href="#s6">6</a></sup> At $4.95 that's <b>33–35¢ every mile</b>. 10 empty miles ≈ $3.40.</span></li>
+      <li class="v"><span class="t">✓</span><span>Phoenix-area average regular was <b>$4.70</b> on Sept 18.<sup><a href="#s7">7</a></sup> You're paying $4.89–5.00, which is 19–30¢ over, or about $4.75–7.50 per 25 gallons.</span></li>
       <li class="v"><span class="t">✓</span><span>Costco gas at <b>15255 N Hayden Rd</b> is about 1.5 miles from the Kierland garage (membership required).<sup><a href="#s8">8</a></sup> Check GasBuddy before you go.</span></li>
       <li class="v"><span class="t">✓</span><span>In Tempe heat, a car parked 1 hour in shade had about 100°F inside, vs 116°F in sun. Seats were 105°F vs 123°F.<sup><a href="#s9">9</a></sup></span></li>
-      <li class="i"><span class="t">≈</span><span>Idling: a 4.6L engine burns 0.39 gal/hr with no load, and AC adds up to 90%.<sup><a href="#s10">10</a></sup> For your 5.3L with AC, that's roughly 0.5–0.75 gal/hr, or about $2.50–3.70/hr. Still cheaper than 8 empty miles.</span></li>
+      <li class="i"><span class="t">≈</span><span>Idling: a 4.6L engine burns 0.39 gal/hr with no load, and AC adds up to 90%.<sup><a href="#s10">10</a></sup> Scaled to a 5.3L with AC, that's roughly 0.45–0.85 gal/hr, or $2.20–4.20/hr at $4.95. An hour of idling costs about the same as 6–12 empty miles.</span></li>
     </ul>
   </section>
 
   <section class="card">
     <h2>Sources</h2>
     <ol class="src">
-      <li id="s1"><a href="https://www.uber.com/us/en/marketplace/matching/" target="_blank" rel="noopener">Uber: Marketplace matching</a></li>
-      <li id="s2"><a href="https://www.fairmont.com/en/hotels/scottsdale/fairmont-scottsdale-princess/guest-services.html" target="_blank" rel="noopener">Resort check-out times (Princess, Sanctuary, Phoenician, Westin Kierland: 11am)</a></li>
-      <li id="s3"><a href="https://www.takeofftimer.com/airports/PHX" target="_blank" rel="noopener">PHX peak times: 7–9am and 3–6pm</a> · <a href="https://airportshuttleofphoenix.com/blog/phx-airport-arrival-time-guide" target="_blank" rel="noopener">arrive 2.5 hrs early for 5–8am flights</a></li>
-      <li id="s4"><a href="https://oldtownscottsdaleaz.com/get-around/public-parking/" target="_blank" rel="noopener">Old Town Scottsdale public parking: garages free; street 3-hr limit 8am–10pm</a> · <a href="https://assets.experiencescottsdale.com/simpleview/image/upload/v1/clients/scottsdale/23_176_Old_Town_Parking_Map_Update_F_b681a6f4-9c70-46a1-86ab-1332ba0c66b9.pdf" target="_blank" rel="noopener">parking map</a></li>
-      <li id="s5"><a href="https://www.kierlandcommons.com/Visit" target="_blank" rel="noopener">Kierland Commons: free garage, NW side behind Platella</a></li>
-      <li id="s6"><a href="https://www.fueleconomy.gov/feg/bymodel/2024_Chevrolet_Suburban.shtml" target="_blank" rel="noopener">fueleconomy.gov: Chevrolet Suburban</a></li>
-      <li id="s7"><a href="https://www.gasolytics.com/gas-prices/arizona/phoenix" target="_blank" rel="noopener">Phoenix gas prices</a> · <a href="https://www.azfamily.com/2026/09/15/how-does-each-phoenix-gas-station-set-its-prices-why-nearby-pumps-differ/" target="_blank" rel="noopener">azfamily, Sept 15 2026</a></li>
-      <li id="s8"><a href="https://www.yelp.com/biz/costco-gasoline-scottsdale" target="_blank" rel="noopener">Costco Gasoline, 15255 N Hayden Rd</a></li>
-      <li id="s9"><a href="https://news.asu.edu/20180516-discoveries-asu-study-hot-cars-can-hit-deadly-temperatures-within-one-hour" target="_blank" rel="noopener">ASU hot-car study, Tempe</a></li>
-      <li id="s10"><a href="https://afdc.energy.gov/files/u/publication/argonne_idling_handout.pdf" target="_blank" rel="noopener">Argonne National Lab: idling fuel use</a></li>
-      <li id="s11"><a href="https://therideshareguy.com/how-does-ubers-destination-filter-work/" target="_blank" rel="noopener">Destination filter: 2 per day; several trips toward one destination count once</a></li>
-      <li id="s12"><a href="https://therideshareguy.com/uber-reserve/" target="_blank" rel="noopener">Uber Reserve for drivers: Opportunities in the app menu, up to 7 days ahead, fare locked</a></li>
-      <li id="s13"><a href="https://gridwise.io/blog/uber-and-lyft-driver-instructions-for-phoenix-sky-harbor-international-airport-phx" target="_blank" rel="noopener">PHX: rideshare drivers may wait only in staging lots</a></li>
-      <li id="s14"><a href="https://tourism.az.gov/phoenix-area-hotel-occupancy-climbs-to-49-1/" target="_blank" rel="noopener">Arizona Office of Tourism hotel data</a> · <a href="https://hotelguru.com/articles/hotel-market-outlook-2026/" target="_blank" rel="noopener">Phoenix weekday occupancy runs above weekend</a></li>
-      <li id="s15"><a href="https://thehustle.co/news/the-third-party-apps-uber-and-lyft-are-trying-to-kill" target="_blank" rel="noopener">The Hustle: third-party driver apps Uber and Lyft are trying to kill</a> · <a href="https://therideshareguy.com/weekly-roundup-lyft-threatens-driver-deactivation-over-third-party-earnings-apps/" target="_blank" rel="noopener">Lyft deactivation warning</a></li>
-      <li id="s16"><a href="https://github.com/evgeniimatveev/uber-driver-analytics" target="_blank" rel="noopener">GitHub: uber-driver-analytics (one LA driver, 3,448 trips)</a> · <a href="https://github.com/joshur19/uber-heatmap" target="_blank" rel="noopener">uber-heatmap</a></li>
+      <li id="s1" value="1"><a href="https://www.uber.com/us/en/marketplace/matching/" target="_blank" rel="noopener">Uber: Marketplace matching</a></li>
+      <li id="s2" value="2"><a href="https://www.fairmont.com/en/hotels/scottsdale/fairmont-scottsdale-princess/guest-services.html" target="_blank" rel="noopener">Fairmont Princess guest services: 11am check-out</a> (Sanctuary, Phoenician and Westin Kierland 11am per their booking listings)</li>
+      <li id="s3" value="3"><a href="https://www.takeofftimer.com/airports/PHX" target="_blank" rel="noopener">PHX busiest times: 7–9am and 3–6pm</a></li>
+      <li id="s4" value="4"><a href="https://oldtownscottsdaleaz.com/get-around/public-parking/" target="_blank" rel="noopener">Old Town Scottsdale public parking: garages free; street free, 3-hr limit 8am–10pm</a> (2nd St &amp; Brown lot/underground garage, 3806 N Brown Ave) · <a href="https://assets.experiencescottsdale.com/simpleview/image/upload/v1/clients/scottsdale/23_176_Old_Town_Parking_Map_Update_F_b681a6f4-9c70-46a1-86ab-1332ba0c66b9.pdf" target="_blank" rel="noopener">parking map</a></li>
+      <li id="s5" value="5"><a href="https://www.kierlandcommons.com/Visit" target="_blank" rel="noopener">Kierland Commons: free garage, NW side behind Platella</a></li>
+      <li id="s6" value="6"><a href="https://www.fueleconomy.gov/feg/bymodel/2024_Chevrolet_Suburban.shtml" target="_blank" rel="noopener">fueleconomy.gov: Chevrolet Suburban</a></li>
+      <li id="s7" value="7"><a href="https://www.gasolytics.com/gas-prices/arizona/phoenix" target="_blank" rel="noopener">Phoenix gas prices</a> · <a href="https://www.azfamily.com/2026/09/15/how-does-each-phoenix-gas-station-set-its-prices-why-nearby-pumps-differ/" target="_blank" rel="noopener">azfamily, Sept 15 2026</a></li>
+      <li id="s8" value="8"><a href="https://www.yelp.com/biz/costco-gasoline-scottsdale" target="_blank" rel="noopener">Costco Gasoline, 15255 N Hayden Rd</a></li>
+      <li id="s9" value="9"><a href="https://news.asu.edu/20180516-discoveries-asu-study-hot-cars-can-hit-deadly-temperatures-within-one-hour" target="_blank" rel="noopener">ASU hot-car study, Tempe</a></li>
+      <li id="s10" value="10"><a href="https://afdc.energy.gov/files/u/publication/argonne_idling_handout.pdf" target="_blank" rel="noopener">Argonne National Lab: idling fuel use</a></li>
+      <li id="s11" value="11"><a href="https://therideshareguy.com/how-does-ubers-destination-filter-work/" target="_blank" rel="noopener">Destination filter: 2 per day; several trips toward one destination count once</a></li>
+      <li id="s12" value="12"><a href="https://therideshareguy.com/uber-reserve/" target="_blank" rel="noopener">Uber Reserve for drivers: Opportunities in the app menu, up to 7 days ahead, fare locked</a></li>
+      <li id="s13" value="13"><a href="https://gridwise.io/blog/uber-and-lyft-driver-instructions-for-phoenix-sky-harbor-international-airport-phx" target="_blank" rel="noopener">PHX: rideshare drivers may wait only in staging lots</a></li>
+      <li id="s15" value="15"><a href="https://thehustle.co/news/the-third-party-apps-uber-and-lyft-are-trying-to-kill" target="_blank" rel="noopener">The Hustle: third-party driver apps Uber and Lyft are trying to kill</a> · <a href="https://therideshareguy.com/weekly-roundup-lyft-threatens-driver-deactivation-over-third-party-earnings-apps/" target="_blank" rel="noopener">Lyft deactivation warning</a></li>
+      <li id="s16" value="16"><a href="https://github.com/evgeniimatveev/uber-driver-analytics" target="_blank" rel="noopener">GitHub: uber-driver-analytics (one LA driver, 3,448 trips)</a> · <a href="https://github.com/joshur19/uber-heatmap" target="_blank" rel="noopener">uber-heatmap</a></li>
+      <li id="s17" value="17"><a href="https://help.uber.com/en/driving-and-delivering/article/gps-did-not-load-properly?nodeId=9a8564d4-b656-4997-be2f-bf83714a47b4" target="_blank" rel="noopener">Uber Help: GPS did not load properly</a> · <a href="https://itoolab.com/tips/uber-gps-not-working/" target="_blank" rel="noopener">weak GPS in tunnels and dense cover</a></li>
     </ol>
-    <p class="foot">Uber doesn't publish where Black requests happen by hour. The fastest way to replace my ≈ items with facts is your own trip history: drivers.uber.com lists request time and pickup location for every trip.</p>
+    <p class="foot">Uber doesn't publish where Black requests happen by hour. The fastest way to replace my ≈ items with facts is your own trip history: Uber's data download includes when and where each trip was requested, started and ended. Load it in Your trips above.</p>
   </section>
 </div>
 
@@ -177,10 +177,10 @@ const P = (lat, lon) => [ +((lon - LON0) * KX).toFixed(1), +((LAT1 - lat) * KY).
 
 /* ----- parking spots (verified free public parking) ----- */
 const PARK = {
-  oldtown:{name:"2nd St & Brown Ave garage", area:"Old Town Scottsdale", addr:"3806 N Brown Ave, Scottsdale", lat:33.4920, lon:-111.9240,
-    note:"City garage: free, no time limit, underground, so the coolest option.", src:"s4"},
+  oldtown:{name:"2nd St & Brown Ave lot + garage", area:"Old Town Scottsdale", addr:"3806 N Brown Ave, Scottsdale", lat:33.4920, lon:-111.9240,
+    note:"Public city lot + underground garage. Free. Park where the Uber app still shows your location.", src:"s4"},
   kierland:{name:"Kierland Commons garage", area:"Scottsdale Rd & Greenway", addr:"Kierland Commons, 15210 N Scottsdale Rd, Scottsdale", lat:33.6245, lon:-111.9285,
-    note:"Free garage on the NW side behind Platella. About 1/2 mile from Westin Kierland.", src:"s5"},
+    note:"Free shopping-center garage, NW side behind Platella. About 1/2 mile from Westin Kierland.", src:"s5"},
 };
 
 /* ----- hotels (addresses verified; map positions approximate) ----- */
@@ -206,25 +206,29 @@ const OLDTOWN_SET = ["w","valleyho","canopy","andaz","phoenician","shadows","cam
 const BLOCKS = [
   {s:4.75, e:10, label:"4:45", tab:"Old Town", name:"Morning flights", park:"oldtown", bounce:"oldtown", hot:OLDTOWN_SET,
    facts:[
-     ["v","PHX departures peak 7–9am, and travelers are told to arrive 2.5 hrs early for 5–8am flights, so hotel pickups run about 4:30–7am and keep going for later flights.","s3"],
-     ["v","9 upscale hotels and resorts sit within 4 miles (straight line) of this garage: W, Valley Ho, Canopy, Andaz, the Phoenician, and the Lincoln Dr resorts.",""],
-     ["v","Before 8am, street parking around the garage is free with no limit if you'd rather sit at the curb for a faster exit.","s4"],
-     ["i","Central spot = shortest ETA to all 9 hotels, which is what Uber optimizes. Hotel-to-PHX is about 8–10 road miles.",""]]},
+     ["v","PHX's busiest times are 7–9am and 3–6pm.","s3"],
+     ["i","Hotels here are roughly 20 min from PHX. If 7–9am is flight time, those riders leave the hotel about 4:15–7:15am. If it's when they reach the airport, about 6:30–8:40am. This block covers both.",""],
+     ["v","9 upscale hotels and resorts are within about 4 miles (straight line): W, Valley Ho, Canopy, Andaz, the Phoenician, Mountain Shadows, Camelback Inn, Montelucia, Sanctuary. (Addresses checked; distances measured on the map.)",""],
+     ["v","Old Town street parking is free, with a 3-hour limit only from 8am to 10pm, so before 8am you can sit at the curb for a faster exit.","s4"],
+     ["i","Uber matches on pickup time, so a spot in the middle of the 9 keeps your ETA short to all of them. Hotel-to-PHX is roughly 8–10 miles by my map estimate.",""]]},
   {s:10, e:12.25, label:"10:00", tab:"Kierland", name:"11am checkout wave", park:"kierland", bounce:"oldtown", hot:["kierland","princess"],
    facts:[
      ["v","Westin Kierland and the Fairmont Princess both check out at 11am.","s2"],
-     ["v","Costco gas (15255 N Hayden Rd) is about 1.5 miles away. Fill up here instead of paying $4.89–5.00.","s8"],
-     ["i","Kierland to PHX is about 18 road miles, roughly double an Old Town airport run, so a bigger fare. But you drive back empty, and one LA Black-tier driver's 3,448 trips paid $118/hr on 0–2 mi trips vs $80/hr on 20+ mi. Check your own numbers in Your trips.","s16"],
-     ["i","Backup: the Phoenician and Sanctuary also check out at 11am. If you're south, use the Old Town garage instead.","s2"]]},
+     ["v","Costco gas (15255 N Hayden Rd) is about 1.5 miles away (membership required). Check its price in GasBuddy against the $4.89–5.00 you've been paying.","s8"],
+     ["i","Kierland to PHX is roughly 18 miles, more than double an Old Town airport run (my map estimates), so a bigger fare. But you drive back empty, and one LA Uber driver's own 3,448 trips paid $118/hr on 0–2 mi trips vs $80/hr on 20+ mi. Check your own numbers in Your trips.","s16"],
+     ["v","The Phoenician and Sanctuary also check out at 11am. If you're south of Shea when this block starts, use the Old Town spot instead of driving up.","s2"],
+     ["i","This is shopping-center customer parking. If security asks you to move, move.",""]]},
   {s:12.25, e:16.25, label:"12:15", tab:"Old Town", name:"Afternoon flights", park:"oldtown", bounce:"oldtown", hot:OLDTOWN_SET,
    facts:[
-     ["v","PHX has its second daily peak at 3–6pm, so hotel pickups run about 12:30–4pm.","s3"],
-     ["v","This garage is underground. Shade kept a parked car about 16°F cooler inside in Tempe heat.","s9"],
-     ["i","Same reasoning as the morning: the most hotels within one short ETA.",""]]},
+     ["v","PHX's second busy period is 3–6pm.","s3"],
+     ["i","By the same math as the morning, hotel pickups run about 12:15–5:30pm, so your whole afternoon is in the window.",""],
+     ["v","Shade kept a parked car about 16°F cooler inside after an hour in Tempe heat.","s9"],
+     ["i","The underground garage is the coolest spot, but it can block GPS. Park near the entrance ramp and check that the Uber app still shows your location. If it doesn't, use the surface lot.",""],
+     ["i","Same reasoning as the morning: short pickup time to all 9 hotels.",""]]},
   {s:16.25, e:17, label:"4:15", tab:"Home", name:"Ride home", park:null, bounce:null, hot:[],
    facts:[
      ["v","You get 2 destination filters a day. Several trips toward the same destination count as one.","s11"],
-     ["i","Set it toward home now so your last trip, or last few, cover the drive home instead of 15–25 empty miles ($5–9).",""]]},
+     ["i","Set it toward home now so your last trip, or last few, cover the drive home. Every empty mile home costs about 34¢.",""]]},
 ];
 
 /* ----- helpers ----- */
@@ -252,7 +256,7 @@ const ROADS = [
 ];
 const ARTS = [
   {n:"Camelback Rd", pts:[[33.5095,-112.07],[33.5095,-111.88]], lab:[33.5095,-112.0], dy:-6},
-  {n:"Lincoln Dr", pts:[[33.531,-112.03],[33.531,-111.926]], lab:[33.531,-112.0], dy:-6},
+  {n:"Lincoln Dr", pts:[[33.531,-112.03],[33.531,-111.926]], lab:[33.531,-112.015], dy:-6},
   {n:"Scottsdale Rd", pts:[[33.43,-111.926],[33.645,-111.926]], lab:[33.585,-111.926], rot:true},
   {n:"Indian School", pts:[[33.4948,-111.99],[33.4948,-111.88]], lab:[33.4948,-111.975], dy:-6},
 ];
@@ -295,7 +299,7 @@ function drawMap(b){
   Object.entries(HOTELS).forEach(([id,h]) => {
     const on = b.hot.includes(id); if(!on) return;
     const [x,y] = P(h.lat,h.lon);
-    const left = ["montelucia","valleyho","phoenician","azbiltmore","kierland"].includes(id);
+    const left = ["montelucia","valleyho","phoenician","azbiltmore","kierland","canopy"].includes(id);
     s += `<text x="${left?x-10:x+10}" y="${y+4}" font-size="12" font-weight="600" fill="${C.ink}" text-anchor="${left?"end":"start"}" font-family="${C.sans}" stroke="${C.bg}" stroke-width="3" paint-order="stroke">${h.n}</text>`;
   });
   // parking spots
@@ -451,7 +455,7 @@ function analyze(m){
       return `<td title="${c.days.size} day(s)" style="background:${shade(v)};height:26px;text-align:center;color:${v/max>0.55?"#1A0A02":"#F3F5F7"};font-weight:600">${money(v)}</td>`;
     }).join("") + `</tr>`;
   });
-  grid += `</table></div><p class="foot">Each cell: average earned from trips starting in that hour, on days you drove that hour. Darker = more.</p>`;
+  grid += `</table></div><p class="foot">Each cell: average earned from trips that started in that hour, on days you got at least one trip then. Hours you were online with no trips aren't in the file, so these run high. Darker = more.</p>`;
 
   // top pickup spots (~0.7-mile squares)
   const withLoc = trips.filter(t => isFinite(t.lat) && isFinite(t.lng) && Math.abs(t.lat) > 1);
