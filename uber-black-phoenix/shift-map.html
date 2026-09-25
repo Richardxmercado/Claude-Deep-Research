@@ -360,11 +360,11 @@ try{ navigator.wakeLock && navigator.wakeLock.request("screen").catch(()=>{}); }
 
 /* ----- Pre-ride messages with copy buttons ----- */
 const MSGS = [
-  {t:"Your message", m:"Hi NAME, this is Richard, your Uber Black driver. I'll be picking you up in a 2026 Chevy Suburban. I'm happy to open and close the trunk for you. Want a certain temperature or music? Just let me know. If you use Spotify, feel free to join the Jam. Also, no vaping in the car. If you enjoy the ride, I also do scheduled rides, so just ask me for my info. See you soon!"},
+  {t:"Your message", m:"Hi NAME, this is Richard, your Uber Black driver.\n\nI'll be picking you up in a 2026 Chevy Suburban. I'm happy to open and close the trunk for you. Want a certain temperature or music? Just let me know. If you use Spotify, feel free to join the Jam. Also, no vaping in the car. If you enjoy the ride, I also do scheduled rides, so just ask me for my info if interested.\n\nSee you soon!"},
 ];
 $("msg-list").innerHTML = MSGS.map((x,i) => `<div style="border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:6px">
   <div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><b style="font-size:14px">${x.t}</b><button class="back" data-copy="${i}" style="padding:6px 12px">Copy</button></div>
-  <p id="msg-${i}" style="margin:0;font-size:14px;color:var(--muted);user-select:all">${x.m}</p></div>`).join("");
+  <p id="msg-${i}" style="margin:0;font-size:14px;color:var(--muted);user-select:all;white-space:pre-line">${x.m}</p></div>`).join("");
 $("msg-list").addEventListener("click", e => {
   const btn = e.target.closest("button[data-copy]"); if(!btn) return;
   const i = +btn.dataset.copy, el = $("msg-" + i);
